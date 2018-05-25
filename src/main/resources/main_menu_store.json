@@ -1,0 +1,107 @@
+[
+    {
+      "text":"人力资源管理",
+      "id": "hr",
+      "expanded": true,
+      "children": [
+        {
+          "id": "user",
+          "text": "用户管理",
+          "leaf": true,
+          "funViewXtype": "userview",
+          "funController": "core.app.controller.UserController",
+          "funViewName": "core.app.view.UserView"
+        },
+        {
+          "id": "station",
+          "text": "公司岗位管理",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "教务管理",
+      "id": "edu",
+      "expanded": true,
+      "children": [
+        {
+          "id": "school",
+          "text": "校区管理",
+          "leaf": true
+        },
+        {
+          "id": "clazz",
+          "text": "班级管理",
+          "leaf": true
+        },
+        {
+          "id": "teacher",
+          "text": "教师管理",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "学员管理",
+      "id": "student",
+      "expanded": true,
+      "children": [
+        {
+          "id": "stubasic",
+          "text": "学员基本信息管理",
+          "leaf": true
+        },
+        {
+          "id": "stucode",
+          "text": "学员代码量统计",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "财务管理",
+      "id": "finance",
+      "expanded": true,
+      "children": [
+        {
+          "id": "schoolfinance",
+          "text": "校区财务管理",
+          "leaf": true
+        },
+        {
+          "id": "approvalfinance",
+          "text": "财务审批管理",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "咨询业务管理",
+      "id": "consult",
+      "expanded": true,
+      "children": [
+        {
+          "id": "customer",
+          "text": "咨询客户管理",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "规章制度管理",
+      "id": "regulation",
+      "expanded": true,
+      "children": [
+        {
+          "id": "regulationview",
+          "text": "规章制度查看",
+          "leaf": true
+        },
+        {
+          "id": "regulationdown",
+          "text": "规章模板下载",
+          "leaf": true
+        }
+      ]
+    }
+  ]

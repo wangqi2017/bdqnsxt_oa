@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.ClazzDao">
+
+    <sql id="clCol">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        clname,orientation,schoolId,startDate,endDate,status,lecturerId,classLeaderId
+    </sql>
+
+    <resultMap type="clazz" id="basicClazzMap">
+        <id column="id" property="id"/>
+        <result column="createByUsername" property="createByUsername"/>
+        <result column="createOn" property="createOn"/>
+        <result column="updateByUsername" property="updateByUsername"/>
+        <result column="updateOn" property="updateOn"/>
+        <result column="createByUserId" property="createByUserId"/>
+        <result column="updateByUserId" property="updateByUserId"/>
+        <result column="clname" property="clname"/>
+        <result column="orientation" property="orientation"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <resultMap type="clazz" id="clazzMap" extends="com.bdqnsxt.oa.dao.ClazzDao.basicClazzMap">
+        <association property="belongSchool" fetchType="eager" column="schoolId"
+                     select="com.bdqnsxt.oa.dao.SchoolDao.getById"/>
+        <association property="lecturer" fetchType="eager" column="lecturerId"
+                     select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+        <association property="classLeader" fetchType="eager" column="classLeaderId"
+                     select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+        <collection  property="tutors" column="id" fetchType="eager" ofType="user" select="com.bdqnsxt.oa.dao.UserDao.getTutorByClazz"/>
+    </resultMap>
+
+    <resultMap type="clazz" id="clazzStudentMap" extends="com.bdqnsxt.oa.dao.ClazzDao.basicClazzMap">
+        <collection  property="students" column="{currentClazzId=id}" fetchType="eager" ofType="student" select="com.bdqnsxt.oa.dao.StudentDao.getByClazz"/>
+    </resultMap>
+
+
+    <select id="getAll" resultType="clazz">
+        select
+        <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/>
+        from _clazz
+    </select>
+
+    <select id="getListPage" resultMap="clazzMap" parameterType="baseQuery">
+        select
+        <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/>
+        from _clazz
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+    </select>
+
+    <resultMap type="clazz" id="clazzMapSchool" extends="com.bdqnsxt.oa.dao.ClazzDao.basicClazzMap">
+        <association property="belongSchool" fetchType="eager" column="schoolId"
+                     select="com.bdqnsxt.oa.dao.SchoolDao.getById"/>
+    </resultMap>
+
+    <select id="getById" resultMap="clazzMapSchool">
+        select <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/> from _clazz
+        where id = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <insert id="save" parameterType="clazz" useGeneratedKeys="true" keyProperty="id">
+        insert into _clazz(
+        <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{clname,jdbcType=VARCHAR},
+        #{orientation,jdbcType=VARCHAR},
+        #{belongSchool.id,jdbcType=NUMERIC},
+        #{startDate,jdbcType=DATE},
+        #{endDate,jdbcType=DATE},
+        #{status,jdbcType=VARCHAR},
+        #{lecturer.id,jdbcType=NUMERIC},
+        #{classLeader.id,jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <update id="update" parameterType="clazz">
+		update _clazz set clname=#{clname,jdbcType=VARCHAR},orientation=#{orientation,jdbcType=VARCHAR},
+		schoolId=#{belongSchool.id,jdbcType=NUMERIC},startDate=#{startDate,jdbcType=DATE},
+		endDate=#{endDate,jdbcType=DATE},status=#{status,jdbcType=VARCHAR},lecturerId=#{lecturer.id,jdbcType=NUMERIC},
+		classLeaderId=#{classLeader.id,jdbcType=NUMERIC},
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</update>
+
+    <delete id="delete" parameterType="clazz">
+		delete from _clazz where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+    <select id="getByClname" resultType="clazz">
+        select
+        <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/>
+        from _clazz
+        where clname = #{clname,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="getByClnameId" resultType="clazz">
+        select
+        <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/>
+        from _clazz
+        where clname = #{clname,jdbcType=VARCHAR} and id != #{id,jdbcType=NUMERIC}
+    </select>
+
+    <insert id="saveClazzTutors">
+        insert into _clazz_tutor(clazzId,tutorId) values
+        <foreach collection="tutors" item="tutor" separator=",">
+            (#{clazzId,jdbcType=NUMERIC},#{tutor.id,jdbcType=NUMERIC})
+        </foreach>
+    </insert>
+
+    <select id="getBySchool" resultMap="clazzStudentMap">
+        select <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/> from _clazz
+        where schoolId = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getCurrentBySchool" resultMap="clazzStudentMap">
+        select <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/> from _clazz
+        where schoolId = #{id,jdbcType=NUMERIC} and status = '试听'
+        UNION
+        select <include refid="com.bdqnsxt.oa.dao.ClazzDao.clCol"/> from _clazz
+        where schoolId = #{id,jdbcType=NUMERIC} and status = '开班'
+    </select>
+
+</mapper>

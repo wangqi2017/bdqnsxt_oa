@@ -1,0 +1,12 @@
+<config>
+    <jars>
+        <jar in="oa-0.0.1-SNAPSHOT.jar" out="oa-0.0.1-SNAPSHOT-obfuscated.jar"/>
+    </jars>
+    <keep-names>
+        <class access="protected+">
+            <field access="protected+"/>
+            <method access="protected+"/>
+        </class>
+    </keep-names>
+    <property name="log-file" value="log.xml"/>
+</config>

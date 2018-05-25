@@ -1,0 +1,348 @@
+[
+  {
+    "title": "人力资源管理",
+    "id":"hr_manager",
+    "autoScroll": true,
+    "items": [
+      {
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "用户管理",
+                "id": "user_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">用户信息</span>",
+                    "id": "menu_userview",
+                    "leaf": true,
+                    "funViewXtype": "userview",
+                    "funController": "core.app.controller.UserController",
+                    "funViewName": "core.app.view.UserView"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },{
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "部门岗位管理",
+                "id": "department_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">部门岗位信息</span>",
+                    "id": "menu_departmentview",
+                    "leaf": true,
+                    "funViewXtype": "departmentview",
+                    "funController": "core.app.controller.DepartmentController",
+                    "funViewName": "core.app.view.DepartmentView"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }]
+  },
+  {
+  "title": "教务管理",
+  "id":"edu_manager",
+  "autoScroll": true,
+  "items": [
+    {
+      "xtype": "treepanel",
+      "rootVisible": false,
+      "displayField": "text",
+      "margin": "0 0 5 0",
+      "border": 0,
+      "store": {
+        "store": "tree",
+        "fields": [
+          "id",
+          "text",
+          "leaf",
+          "funViewXtype",
+          "funController",
+          "funViewName"
+        ],
+        "root": {
+          "text": "systemroot",
+          "expanded": true,
+          "children": [
+            {
+              "text": "校区管理",
+              "id": "school_manager",
+              "leaf": true,
+              "funViewXtype": "schoolview",
+              "funController": "core.app.controller.SchoolController",
+              "funViewName": "core.app.view.SchoolView"
+            },
+            {
+              "text": "班级管理",
+              "id": "clazz_manager",
+              "leaf": true,
+              "funViewXtype": "clazzview",
+              "funController": "core.app.controller.ClazzController",
+              "funViewName": "core.app.view.ClazzView"
+            },
+            {
+              "text": "教师管理",
+              "id": "teacher_manager",
+              "leaf": true,
+              "funViewXtype": "teacherview",
+              "funController": "core.app.controller.TeacherController",
+              "funViewName": "core.app.view.TeacherView"
+            }
+          ]
+        }
+      }
+    }]
+  },
+  {
+    "title": "学员管理",
+    "id":"stu_manager",
+    "autoScroll": true,
+    "items": [
+      {
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "学员信息管理",
+                "id": "stu_info_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">学员基本信息</span>",
+                    "id": "menu_stuview",
+                    "leaf": true,
+                    "funViewXtype": "studentview",
+                    "funController": "core.app.controller.StudentController",
+                    "funViewName": "core.app.view.StudentView"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },{
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "学员成绩管理",
+                "id": "stu_score_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">学员代码量统计</span>",
+                    "id": "menu_codeview",
+                    "leaf": true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }]
+  },
+  {
+    "title": "财务管理",
+    "id":"finance_manager",
+    "autoScroll": true,
+    "items": [
+      {
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "校区流水管理",
+                "id": "finance_school_manager",
+                "leaf": true
+              },
+              {
+                "text": "财务审批管理",
+                "id": "finance_approval_manager",
+                "leaf": true
+              }
+            ]
+          }
+        }
+      }]
+  },
+  {
+    "title": "咨询业务管理",
+    "id":"consult_manager",
+    "autoScroll": true,
+    "items": [
+      {
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "咨询客户管理",
+                "id": "customer_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">咨询跟踪</span>",
+                    "id": "consult_trace",
+                    "leaf": true,
+                    "funViewXtype": "studentconsultview",
+                    "funController": "core.app.controller.StudentConsultController",
+                    "funViewName": "core.app.view.StudentConsultView"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }]
+  },
+  {
+    "title": "文档管理",
+    "id":"doc_manager",
+    "autoScroll": true,
+    "items": [
+      {
+        "xtype": "treepanel",
+        "rootVisible": false,
+        "displayField": "text",
+        "margin": "0 0 5 0",
+        "border": 0,
+        "store": {
+          "store": "tree",
+          "fields": [
+            "id",
+            "text",
+            "leaf",
+            "funViewXtype",
+            "funController",
+            "funViewName"
+          ],
+          "root": {
+            "text": "systemroot",
+            "expanded": true,
+            "children": [
+              {
+                "text": "青鸟模板管理",
+                "id": "regulation_manager",
+                "leaf": false,
+                "children": [
+                  {
+                    "text": "<span style=\"font-weight:bold\">模板管理</span>",
+                    "id": "regulation_upload",
+                    "leaf": true,
+                    "funViewXtype": "documentview",
+                    "funController": "core.app.controller.DocumentController",
+                    "funViewName": "core.app.view.DocumentView"
+                  }]
+              }
+            ]
+          }
+        }
+      }]
+  }
+]

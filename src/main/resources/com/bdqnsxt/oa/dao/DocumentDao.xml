@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.DocumentDao">
+
+    <sql id="col">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        name,description,location
+    </sql>
+
+    <resultMap type="document" id="basicDocumentMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+    <id column="name" property="name"/>
+    <id column="description" property="description"/>
+    <id column="location" property="location"/>
+</resultMap>
+
+    <resultMap type="document" id="documentMap" extends="com.bdqnsxt.oa.dao.DocumentDao.basicDocumentMap">
+        <collection  property="documentCategories" column="{docId=id}" fetchType="eager" ofType="documentCategory" select="com.bdqnsxt.oa.dao.DocumentCategoryDao.getByDocument" />
+    </resultMap>
+
+    <select id="getListPage" resultMap="documentMap" parameterType="baseQuery">
+        select <include refid="com.bdqnsxt.oa.dao.DocumentDao.col"/> from _doc d join _doc_cat ct on
+        d.id=ct.docId
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+    </select>
+
+    <insert id="save" parameterType="document" useGeneratedKeys="true" keyProperty="id">
+        insert into _doc(
+          <include refid="com.bdqnsxt.oa.dao.DocumentDao.col"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{name,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR},
+        #{location,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="saveDocCat" parameterType="document" useGeneratedKeys="true" keyProperty="id">
+        insert into _doc_cat(docId,catId) values
+        <foreach collection="documentCategories" index="index" item="documentCategory" separator=",">
+            (#{id,jdbcType=NUMERIC},#{documentCategory.id,jdbcType=NUMERIC})
+        </foreach>
+    </insert>
+    
+    <delete id="delete" parameterType="documentCategory">
+        delete from _doc where id=#{id,jdbcType=NUMERIC}
+    </delete>
+
+    <select id="getById" resultType="document">
+        select <include refid="com.bdqnsxt.oa.dao.DocumentDao.col"/> from _doc
+        where id=#{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getByCat" resultType="document">
+        select <include refid="com.bdqnsxt.oa.dao.DocumentDao.col"/> from _doc d join _doc_cat ct on d.id=ct.docId
+        where catId=#{catId,jdbcType=NUMERIC}
+    </select>
+    
+    <delete id="deleteCenter">
+        delete from _doc_cat where docId=#{docId,jdbcType=NUMERIC}
+    </delete>
+</mapper>

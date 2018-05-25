@@ -1,0 +1,30 @@
+.itemicon{
+    background-image: url("../images/tree/item.gif")!important;
+}
+.itemaddedicon{
+    background-image: url("../images/tree/itemadded.gif")!important;
+}
+.itemchangedicon{
+    background-image: url("../images/tree/itemchanged.gif")!important;
+}
+.detailicon{
+    background-image: url("../images/tree/detail.gif")!important;
+}
+.laboricon{
+    background-image: url("../images/tree/labordetail.gif")!important;
+}
+.materialicon{
+    background-image: url("../images/tree/materialdetail.gif")!important;
+}
+.equipmenticon{
+    background-image: url("../images/tree/equipmentdetail.gif")!important;
+}
+.directicon{
+    background-image: url("../images/tree/directdetail.gif")!important;
+}
+.indirecticon{
+    background-image: url("../images/tree/indirectdetail.gif")!important;
+}
+.taxicon{
+    background-image: url("../images/tree/taxdetail.gif")!important;
+}

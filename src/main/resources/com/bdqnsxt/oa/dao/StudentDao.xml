@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.StudentDao">
+
+    <sql id="stuCol">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        stuName,idCard,mobilePhone,gender,schoolTime,gradutionTime,gradutionFrom,gradutionRecord,
+        foreignLevel,qq,email,contactor,contactorPhone,remarks,computerSkill,currentClazzId,status
+    </sql>
+
+    <sql id="aliasCol">
+        s.id as id,s.createByUsername as createByUsername,s.createOn as createOn,s.updateByUsername as updateByUsername,
+        s.updateOn as updateOn,s.createByUserId as createByUserId,s.updateByUserId as updateByUserId,
+        s.stuName as stuName,s.idCard as idCard,s.mobilePhone as mobilePhone,s.gender as gender,s.schoolTime as schoolTime,
+        s.gradutionTime as gradutionTime,s.gradutionFrom as gradutionFrom,s.gradutionRecord as gradutionRecord,
+        s.foreignLevel as foreignLevel,s.qq as qq,s.email as email,s.contactor as contactor,s.contactorPhone as contactorPhone,
+        s.remarks as remarks,s.computerSkill as computerSkill,s.currentClazzId as currentClazzId,s.status as status
+    </sql>
+
+    <resultMap type="student" id="basicStudentMap">
+        <id column="id" property="id"/>
+        <result column="createByUsername" property="createByUsername"/>
+        <result column="createOn" property="createOn"/>
+        <result column="updateByUsername" property="updateByUsername"/>
+        <result column="updateOn" property="updateOn"/>
+        <result column="createByUserId" property="createByUserId"/>
+        <result column="updateByUserId" property="updateByUserId"/>
+        <result column="stuName" property="stuName"/>
+        <result column="idCard" property="idCard"/>
+        <result column="mobilePhone" property="mobilePhone"/>
+        <result column="gender" property="gender"/>
+        <result column="schoolTime" property="schoolTime"/>
+        <result column="gradutionTime" property="gradutionTime"/>
+        <result column="gradutionFrom" property="gradutionFrom"/>
+        <result column="gradutionRecord" property="gradutionRecord"/>
+        <result column="foreignLevel" property="foreignLevel"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="contactor" property="contactor"/>
+        <result column="contactorPhone" property="contactorPhone"/>
+        <result column="remarks" property="remarks"/>
+        <result column="computerSkill" property="computerSkill"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <resultMap type="student" id="studentMap" extends="com.bdqnsxt.oa.dao.StudentDao.basicStudentMap">
+        <association property="currentClazz" fetchType="eager" column="currentClazzId"
+                     select="com.bdqnsxt.oa.dao.ClazzDao.getById"/>
+        <association property="studentConsult" fetchType="eager" column="{stuId=id}"
+                     select="com.bdqnsxt.oa.dao.StudentConsultDao.getByStudent"/>
+    </resultMap>
+
+
+
+    <select id="getListPage" resultMap="studentMap" parameterType="baseQuery">
+        select
+        <include refid="com.bdqnsxt.oa.dao.StudentDao.aliasCol"/>
+        from _student s left join _clazz c on s.currentClazzId=c.id
+        left join _stu_consult ct on s.id=ct.stuId
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+    </select>
+
+
+    <insert id="save" parameterType="student" useGeneratedKeys="true" keyProperty="id">
+        insert into _student(
+        <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{stuName,jdbcType=VARCHAR},
+        #{idCard,jdbcType=VARCHAR},
+        #{mobilePhone,jdbcType=VARCHAR},
+        #{gender,jdbcType=VARCHAR},
+        #{schoolTime,jdbcType=DATE},
+        #{gradutionTime,jdbcType=DATE},
+        #{gradutionFrom,jdbcType=VARCHAR},
+        #{gradutionRecord,jdbcType=VARCHAR},
+        #{foreignLevel,jdbcType=VARCHAR},
+        #{qq,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR},
+        #{contactor,jdbcType=VARCHAR},
+        #{contactorPhone,jdbcType=VARCHAR},
+        #{remarks,jdbcType=VARCHAR},
+        #{computerSkill,jdbcType=VARCHAR},
+        #{currentClazz.id,jdbcType=NUMERIC},
+        #{status,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="student">
+		update _student set stuName=#{stuName,jdbcType=VARCHAR},idCard=#{idCard,jdbcType=VARCHAR},
+		mobilePhone=#{mobilePhone,jdbcType=VARCHAR},gender=#{gender,jdbcType=VARCHAR},
+		schoolTime=#{schoolTime,jdbcType=DATE},gradutionTime=#{gradutionTime,jdbcType=DATE},
+		gradutionFrom=#{gradutionFrom,jdbcType=VARCHAR},gradutionRecord=#{gradutionRecord,jdbcType=VARCHAR},
+		foreignLevel=#{foreignLevel,jdbcType=VARCHAR},qq=#{qq,jdbcType=VARCHAR},
+		email=#{email,jdbcType=VARCHAR},contactor=#{contactor,jdbcType=VARCHAR},
+		contactorPhone=#{contactorPhone,jdbcType=VARCHAR},remarks=#{remarks,jdbcType=VARCHAR},
+		computerSkill=#{computerSkill,jdbcType=VARCHAR},currentClazzId=#{currentClazz.id,jdbcType=NUMERIC},
+		status=#{status,jdbcType=VARCHAR},
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</update>
+
+    <delete id="delete" parameterType="student">
+		delete from _student where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+    <select id="getByMobilePhone" resultType="student">
+        select
+        <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/>
+        from _student
+        where mobilePhone = #{mobilePhone,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="getByMobilePhoneId" resultType="student">
+        select
+        <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/>
+        from _student
+        where mobilePhone = #{mobilePhone,jdbcType=VARCHAR} and id != #{id,jdbcType=NUMERIC}
+    </select>
+
+    <insert id="saveStudentClazzs" useGeneratedKeys="true" keyProperty="id">
+        insert into _stu_clazz(id,stuId,clazzId,createBy,createOn) values
+            (#{id,jdbcType=NUMERIC},#{stuId,jdbcType=NUMERIC},#{clazzId,jdbcType=NUMERIC},#{createBy,jdbcType=VARCHAR},#{createOn,jdbcType=TIMESTAMP})
+    </insert>
+    
+    <select id="getByClazz" resultType="student">
+        select <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/> from
+        _student where currentClazzId = #{currentClazzId,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getById" resultType="student">
+        select <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/> from
+        _student where id = #{id,jdbcType=NUMERIC}
+    </select>
+</mapper>

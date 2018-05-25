@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.SchoolDao">
+
+	<sql id="scCol">
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>scname,organization,province,address,leader,leaderPhone
+	</sql>
+
+	<resultMap type="school" id="basicSchoolMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+		<result column="scname" property="scname"/>
+		<result column="organization" property="organization"/>
+		<result column="province" property="province"/>
+		<result column="address" property="address"/>
+		<result column="leader" property="leader"/>
+		<result column="leaderPhone" property="leaderPhone"/>
+	</resultMap>
+
+	<resultMap type="school" id="schoolMap" extends="com.bdqnsxt.oa.dao.SchoolDao.basicSchoolMap">
+		<collection  property="teachers" column="{schoolId=id}" fetchType="eager" ofType="user" select="com.bdqnsxt.oa.dao.UserDao.getTeachersBySchool" />
+		<collection  property="totalClazzes" column="id" fetchType="eager" ofType="clazz" select="com.bdqnsxt.oa.dao.ClazzDao.getBySchool"/>
+		<collection  property="currentClazzes" column="id" fetchType="eager" ofType="clazz" select="com.bdqnsxt.oa.dao.ClazzDao.getCurrentBySchool"/>
+	</resultMap>
+
+	<select id="getAll" resultType="school">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+	</select>
+
+	<select id="getListPage" resultMap="schoolMap" parameterType="baseQuery">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+	</select>
+
+	<insert id="save" parameterType="school" useGeneratedKeys="true" keyProperty="id">
+		insert into _school(
+			<include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/>
+		) values(
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+		#{scname,jdbcType=VARCHAR},
+		#{organization,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{leader,jdbcType=VARCHAR},
+		#{leaderPhone,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="school">
+		update _school set scname=#{scname,jdbcType=VARCHAR},organization=#{organization,jdbcType=VARCHAR},
+		province=#{province,jdbcType=VARCHAR},address=#{address,jdbcType=VARCHAR},
+		leader=#{leader,jdbcType=VARCHAR},leaderPhone=#{leaderPhone,jdbcType=VARCHAR},
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</update>
+	
+	<delete id="delete" parameterType="school">
+		delete from _school where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+	<select id="getByScname" resultType="school">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+		where scname = #{scname,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="getByScnameId" resultType="school">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+		where scname = #{scname,jdbcType=VARCHAR} and id != #{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getById" resultType="school">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+		where id = #{id,jdbcType=NUMERIC}
+	</select>
+
+</mapper>

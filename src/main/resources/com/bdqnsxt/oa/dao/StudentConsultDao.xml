@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.StudentConsultDao">
+
+    <sql id="col">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        stuId,userId,lastLockTime,quizTime,firstVisit,secondVisit,thirdVisit,remarks,purpose
+    </sql>
+
+    <sql id="alias">
+        sc.id as id,sc.createByUsername as createByUsername,sc.createOn as createOn,
+        sc.updateByUsername as updateByUsername,sc.updateOn as updateOn,sc.createByUserId as createByUserId,
+        sc.updateByUserId as updateByUserId,sc.stuId as stuId,sc.userId as userId,sc.lastLockTime as lastLockTime,
+        sc.quizTime as quizTime,sc.firstVisit as firstVisit,sc.secondVisit as secondVisit,
+        sc.thirdVisit as thirdVisit,sc.remarks as remarks,sc.purpose as purpose
+    </sql>
+
+    <resultMap type="studentConsult" id="basicStudentConsultMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+        <result column="lastLockTime" property="lastLockTime"/>
+        <result column="quizTime" property="quizTime"/>
+        <result column="firstVisit" property="firstVisit"/>
+        <result column="secondVisit" property="secondVisit"/>
+        <result column="thirdVisit" property="thirdVisit"/>
+        <result column="remarks" property="remarks"/>
+        <result column="purpose" property="purpose"/>
+    </resultMap>
+
+    <resultMap type="studentConsult" id="basicMap" extends="com.bdqnsxt.oa.dao.StudentConsultDao.basicStudentConsultMap">
+        <association property="consulter" fetchType="eager" column="{id=userId}" select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+        <association property="student" fetchType="eager" column="{id=stuId}" select="com.bdqnsxt.oa.dao.StudentDao.getById"/>
+    </resultMap>
+
+    <resultMap type="studentConsult" id="consultMap" extends="com.bdqnsxt.oa.dao.StudentConsultDao.basicStudentConsultMap">
+        <association property="consulter" fetchType="eager" column="{id=userId}" select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+    </resultMap>
+
+
+    <insert id="save" parameterType="studentConsult" useGeneratedKeys="true" keyProperty="id">
+        insert into _stu_consult(
+          <include refid="com.bdqnsxt.oa.dao.StudentConsultDao.col"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{student.id,jdbcType=NUMERIC},
+        #{consulter.id,jdbcType=NUMERIC},
+        #{lastLockTime,jdbcType=TIMESTAMP},
+        #{quizTime,jdbcType=TIMESTAMP},
+        #{firstVisit,jdbcType=VARCHAR},
+        #{secondVisit,jdbcType=VARCHAR},
+        #{thirdVisit,jdbcType=VARCHAR},
+        #{remarks,jdbcType=VARCHAR},
+        #{purpose,jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <update id="update" parameterType="studentConsult">
+        update _stu_consult set stuId=#{student.id,jdbcType=NUMERIC},
+        userId=#{consulter.id,jdbcType=NUMERIC},lastLockTime=#{lastLockTime,jdbcType=TIMESTAMP},
+        quizTime=#{quizTime,jdbcType=TIMESTAMP},firstVisit=#{firstVisit,jdbcType=VARCHAR},
+        secondVisit=#{secondVisit,jdbcType=VARCHAR},thirdVisit=#{thirdVisit,jdbcType=VARCHAR},
+        purpose=#{purpose,jdbcType=NUMERIC},remarks=#{remarks,jdbcType=VARCHAR},
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+    </update>
+
+    <select id="getByStudent" resultMap="consultMap">
+        select <include refid="com.bdqnsxt.oa.dao.StudentConsultDao.col"/>
+        from _stu_consult where stuId=#{stuId,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getListPage" resultMap="basicMap" parameterType="baseQuery">
+        select
+        <include refid="com.bdqnsxt.oa.dao.StudentConsultDao.alias"/>
+        from _stu_consult sc join _student s on sc.stuId = s.id join _user u
+        on sc.userId = u.id
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+    </select>
+
+    <delete id="delete" parameterType="studentConsult">
+        delete from _stu_consult where id=#{id,jdbcType=NUMERIC}
+    </delete>
+
+    <select id="getRemindList" resultMap="basicMap">
+        select <include refid="com.bdqnsxt.oa.dao.StudentConsultDao.alias"/>
+         from _stu_consult sc join _user u on sc.userId = u.id
+          where quizTime &gt; #{start,jdbcType=TIMESTAMP} and quizTime &lt; #{end,jdbcType=TIMESTAMP}
+    </select>
+</mapper>

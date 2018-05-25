@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.DocumentCategoryDao">
+
+    <sql id="col">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        name,parentId
+    </sql>
+
+    <resultMap type="documentCategory" id="basicDocumentCategoryMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+        <id column="name" property="name"/>
+    </resultMap>
+
+    <resultMap type="documentCategory" id="documentCategoryMap" extends="com.bdqnsxt.oa.dao.DocumentCategoryDao.basicDocumentCategoryMap">
+        <association property="parent" fetchType="eager" column="{id=parentId}" select="com.bdqnsxt.oa.dao.DocumentCategoryDao.getById"/>
+        <collection  property="children" column="{parentId=id}" ofType="documentCategory" select="com.bdqnsxt.oa.dao.DocumentCategoryDao.getByParent"/>
+    </resultMap>
+
+    <select id="getById" resultMap="documentCategoryMap">
+        select
+        <include refid="com.bdqnsxt.oa.dao.DocumentCategoryDao.col"/>
+        from _doccat where  id=#{id,jdbcType=NUMERIC}
+    </select>
+    
+    <select id="getByDocument" resultType="documentCategory">
+        select <include refid="com.bdqnsxt.oa.dao.DocumentCategoryDao.col"/> from _doc_cat ct join _doccat d
+        on ct.catId=d.id where docId=#{docId,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getByParent" resultMap="documentCategoryMap">
+        select
+        <include refid="com.bdqnsxt.oa.dao.DocumentCategoryDao.col"/>
+        from _doccat where  parentId=#{parentId,jdbcType=NUMERIC}
+    </select>
+
+
+    <select id="getRootCats" resultMap="documentCategoryMap">
+        select
+        <include refid="com.bdqnsxt.oa.dao.DocumentCategoryDao.col"/>
+        from _doccat where  parentId = 0
+    </select>
+
+    <insert id="save" parameterType="documentCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into _doccat(
+          <include refid="com.bdqnsxt.oa.dao.DocumentCategoryDao.col"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{name,jdbcType=VARCHAR},
+        #{parent.id,jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <update id="update" parameterType="documentCategory">
+        update _doccat set name=#{name,jdbcType=VARCHAR},
+        parentId=#{parent.id,jdbcType=NUMERIC},
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+    </update>
+    
+    <delete id="delete" parameterType="documentCategory">
+        delete from _doccat where id=#{id,jdbcType=NUMERIC}
+    </delete>
+
+
+</mapper>

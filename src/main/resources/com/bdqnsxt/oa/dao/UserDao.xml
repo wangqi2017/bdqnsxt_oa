@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.UserDao">
+
+	<sql id="userCol">
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+		username,password,fullname,qq,email,gender,mobilePhone,status,hireDate,schoolId,departmentId,isAdmin,isLeader
+	</sql>
+
+	<sql id="userAliasCol">
+		u.id id,u.username username,u.fullname fullname,u.qq qq,u.email email,
+		 u.gender gender,u.mobilePhone mobilePhone,u.status status,u.hireDate hireDate,u.schoolId schoolId,u.departmentId departmentId,
+		  u.createByUsername createByUsername,u.createOn createOn,u.updateByUsername updateByUsername,
+		  u.updateOn updateOn,u.createByUserId createByUserId,u.updateByUserId updateByUserId
+	</sql>
+
+	<resultMap id="basicUserMap" type="user">
+		<id column="id" property="id"/>
+		<result column="createByUsername" property="createByUsername"/>
+		<result column="createOn" property="createOn"/>
+		<result column="updateByUsername" property="updateByUsername"/>
+		<result column="updateOn" property="updateOn"/>
+		<result column="createByUserId" property="createByUserId"/>
+		<result column="updateByUserId" property="updateByUserId"/>
+		<result column="username" property="username"/>
+		<result column="fullname" property="fullname"/>
+		<result column="qq" property="qq"/>
+		<result column="email" property="email"/>
+		<result column="gender" property="gender"/>
+		<result column="mobilePhone" property="mobilePhone"/>
+		<result column="status" property="status"/>
+		<result column="hireDate" property="hireDate"/>
+		<result column="isAdmin" property="isAdmin"/>
+		<result column="isLeader" property="isLeader"/>
+	</resultMap>
+
+
+	<resultMap type="user" id="userMap" extends="com.bdqnsxt.oa.dao.UserDao.basicUserMap">
+		<association property="school" fetchType="eager" column="{id=schoolId}"
+					 select="com.bdqnsxt.oa.dao.SchoolDao.getById"/>
+		<association property="department" fetchType="eager" column="{id=departmentId}"
+					 select="com.bdqnsxt.oa.dao.DepartmentDao.getById"/>
+		<collection  property="roles" column="id" fetchType="eager" ofType="systemRole"
+					 select="com.bdqnsxt.oa.dao.SystemRoleDao.getSystemRoleByUser"/>
+	</resultMap>
+
+	<select id="getListPage" resultMap="userMap" parameterType="baseQuery">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user u left join _role_user ct on u.id=ct.userId
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+	</select>
+
+	<select id="getTeacherListPage" resultMap="userMap" parameterType="baseQuery">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+		from _user u join _role_user ct on u.id=ct.userId join _systemrole r on r.id=ct.roleId
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/> and roleName='教员'
+		union ALL
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+		from _user u join _role_user ct on u.id=ct.userId join _systemrole r on r.id=ct.roleId
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/> and roleName='辅导员'
+	</select>
+
+	<insert id="save" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+		insert into _user(
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		) values(
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+		#{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{fullname,jdbcType=VARCHAR},
+		#{qq,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{gender,jdbcType=VARCHAR},
+		#{mobilePhone,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{hireDate,jdbcType=DATE},
+		#{school.id,jdbcType=NUMERIC},
+		#{department.id,jdbcType=NUMERIC},
+		#{isAdmin,jdbcType=BOOLEAN},
+		#{isLeader,jdbcType=BOOLEAN}
+		)
+	</insert>
+
+	<update id="update" parameterType="user">
+		update _user set username=#{username,jdbcType=VARCHAR},fullname=#{fullname,jdbcType=VARCHAR},
+		qq=#{qq,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},
+		gender=#{gender,jdbcType=VARCHAR},mobilePhone=#{mobilePhone,jdbcType=VARCHAR},
+		status=#{status,jdbcType=VARCHAR},hireDate=#{hireDate,jdbcType=DATE},
+		schoolId=#{school.id,jdbcType=NUMERIC},departmentId=#{department.id,jdbcType=NUMERIC},
+		isAdmin=#{isAdmin,jdbcType=BOOLEAN},isLeader=#{isLeader,jdbcType=BOOLEAN},
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</update>
+	
+	<update id="updatePass">
+		update _user set password=#{newPassword,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="user">
+		delete from _user where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+	<select id="getByUsername" resultMap="userMap">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where username = #{username,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getByPhone" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where mobilePhone = #{mobilePhone,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getByUsernameId" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where username = #{username,jdbcType=VARCHAR} and id != #{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getByPhoneId" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where mobilePhone = #{mobilePhone,jdbcType=VARCHAR} and id != #{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getById" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where id = #{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getBySchool" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user
+		where schoolId = #{schoolId,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getByDepartment" resultType="user">
+		select <include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user u  where departmentId = #{departmentId,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getByRole" resultType="user">
+		select <include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+		from _user u  join _role_user ct on u.id=ct.userId
+		where roleId = #{roleId,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getUsersBySchoolAndRole" resultType="user">
+		<if test="roleNames!=null and roleNames.length>0">
+			<foreach collection="roleNames" index="index" item="roleName" separator="union">
+				select
+				<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+				from _user u join _role_user ru on u.id=ru.userId join _systemrole
+				s on ru.roleId=s.id where u.schoolId=#{schoolId,jdbcType=VARCHAR} and
+				s.roleName = #{roleName,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="getTeachersBySchool" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+		from _user u join _role_user ru on u.id=ru.userId join _systemrole
+		s on ru.roleId=s.id where u.schoolId=#{schoolId,jdbcType=VARCHAR} and
+		s.roleName = '教员'
+		UNION
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+		from _user u join _role_user ru on u.id=ru.userId join _systemrole
+		s on ru.roleId=s.id where u.schoolId=#{schoolId,jdbcType=VARCHAR} and
+		s.roleName = '辅导员'
+	</select>
+
+	<select id="getByRoleNames" resultType="user">
+		<if test="roleNames!=null and roleNames.length>0">
+			<foreach collection="roleNames" index="index" item="roleName" separator="union">
+				select
+				<include refid="com.bdqnsxt.oa.dao.UserDao.userAliasCol"/>
+				from _user u join _role_user ru on u.id=ru.userId join _systemrole
+				s on ru.roleId=s.id
+				<where>
+					<if test="bq.conditions!=null and bq.conditions.size()>0">
+							<foreach collection="bq.conditions" index="index" item="c" separator="and">
+								${c.name} ${c.op} #{bq.conditions[${index}].value}
+							</foreach>
+					</if>
+					and roleName = #{roleName,jdbcType=VARCHAR}
+				</where>
+			</foreach>
+		</if>
+	</select>
+
+	<select id="getTutorByClazz" resultType="user">
+		select
+		<include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/>
+		from _user u join _clazz_tutor ct on
+		u.id=ct.tutorId where ct.clazzId=#{id,jdbcType=NUMERIC}
+	</select>
+
+	<insert id="saveUserRoles" parameterType="user">
+		<if test="roles!=null and roles.size()>0">
+			insert into _role_user(userId,roleId) values
+			<foreach collection="roles" index="index" item="role" separator=",">
+				(#{id,jdbcType=NUMERIC},#{role.id,jdbcType=NUMERIC})
+			</foreach>
+		</if>
+	</insert>
+
+	<delete id="deleteUserRoles" parameterType="user">
+		delete from _role_user where userId = #{id,jdbcType=NUMERIC}
+	</delete>
+
+	<!--
+	<select id="getByLockStudent" resultType="user">
+		select <include refid="com.bdqnsxt.oa.dao.UserDao.userCol"/> from
+		_user u join _stu_lock ct on u.id=ct.userId where stuId=#{stuId,jdbcType=NUMERIC}
+	</select>
+	-->
+</mapper>

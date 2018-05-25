@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.DepartmentDao">
+
+	<sql id="dtCol">
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+		dtname,description,schoolId
+	</sql>
+
+	<resultMap type="school" id="schoolMap" extends="com.bdqnsxt.oa.dao.SchoolDao.basicSchoolMap">
+		<collection  property="departments" column="{schoolId=id}" fetchType="eager" ofType="department" select="com.bdqnsxt.oa.dao.DepartmentDao.getBySchool" />
+		<collection  property="users" column="{schoolId=id}" fetchType="eager" ofType="user" select="com.bdqnsxt.oa.dao.UserDao.getBySchool"/>
+	</resultMap>
+
+	<resultMap type="department" id="basicDepartmentMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+		<result column="dtname" property="dtname"/>
+		<result column="description" property="description"/>
+	</resultMap>
+
+	<resultMap type="department" id="departmentMap" extends="com.bdqnsxt.oa.dao.DepartmentDao.basicDepartmentMap">
+		<association property="school" fetchType="eager" column="schoolId"
+					 select="com.bdqnsxt.oa.dao.SchoolDao.getById"/>
+		<collection  property="roles" column="{departmentId=id}" fetchType="eager" ofType="systemRole" select="com.bdqnsxt.oa.dao.SystemRoleDao.getByDepartment" />
+		<collection  property="users" column="{departmentId=id}" fetchType="eager" ofType="systemRole" select="com.bdqnsxt.oa.dao.UserDao.getByDepartment" />
+	</resultMap>
+
+	<select id="getAll" resultMap="schoolMap">
+		select <include refid="com.bdqnsxt.oa.dao.SchoolDao.scCol"/> from _school
+	</select>
+
+	<select id="getById" resultType="department">
+		select <include refid="com.bdqnsxt.oa.dao.DepartmentDao.dtCol"/> from _department
+		where id=#{id,jdbcType=NUMERIC}
+	</select>
+
+
+	<select id="getBySchool" resultMap="departmentMap">
+		select <include refid="com.bdqnsxt.oa.dao.DepartmentDao.dtCol"/> from _department
+		where schoolId = #{schoolId,jdbcType=NUMERIC}
+	</select>
+
+	<insert id="save" parameterType="department" useGeneratedKeys="true" keyProperty="id">
+		insert into _department(
+		<include refid="com.bdqnsxt.oa.dao.DepartmentDao.dtCol"/>
+		) values(
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+		#{dtname,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{school.id,jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<update id="update" parameterType="department">
+		update _department set dtname=#{dtname,jdbcType=VARCHAR},
+		description=#{description,jdbcType=VARCHAR},
+		schoolId=#{school.id,jdbcType=NUMERIC},
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</update>
+
+	<delete id="delete" parameterType="department">
+		delete from _department where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+	<select id="getByName" resultType="department">
+		select <include refid="com.bdqnsxt.oa.dao.DepartmentDao.dtCol"/> from _department
+		where dtname=#{dtname,jdbcType=VARCHAR}
+	</select>
+</mapper>

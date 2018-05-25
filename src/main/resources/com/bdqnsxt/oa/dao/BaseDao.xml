@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.BaseDao">
+
+	<sql id="basicCol">
+		id,createByUsername,createOn,updateByUsername,updateOn,createByUserId,updateByUserId,
+	</sql>
+
+	<resultMap type="abstractModel" id="basicMap">
+		<id column="id" property="id"/>
+		<result column="createByUsername" property="createByUsername"/>
+		<result column="createOn" property="createOn"/>
+		<result column="updateByUsername" property="updateByUsername"/>
+		<result column="updateOn" property="updateOn"/>
+		<result column="createByUserId" property="createByUserId"/>
+		<result column="updateByUserId" property="updateByUserId"/>
+	</resultMap>
+
+	<sql id="basicInsert">#{id,jdbcType=NUMERIC},
+		#{createByUsername,jdbcType=VARCHAR},
+		#{createOn,jdbcType=TIMESTAMP},
+		#{updateByUsername,jdbcType=VARCHAR},
+		#{updateOn,jdbcType=TIMESTAMP},
+		#{createByUserId,jdbcType=NUMERIC},
+		#{updateByUserId,jdbcType=NUMERIC},</sql>
+	
+	<sql id="basicUpdate">
+		updateByUsername=#{updateByUsername,jdbcType=VARCHAR},updateOn=#{updateOn,jdbcType=TIMESTAMP},
+		updateByUserId=#{updateByUserId,jdbcType=NUMERIC}
+		where id=#{id,jdbcType=NUMERIC}
+	</sql>
+	
+	<sql id="count">
+		select count(0) from
+	</sql>
+
+	<sql id="queryByConditions">
+		<where>
+			<if test="conditions!=null and conditions.size()>0">
+			<foreach collection="conditions" index="index" item="c" separator="and">
+				${c.name} ${c.op} #{conditions[${index}].value}
+			</foreach>
+		</if>
+		</where>
+	</sql>
+
+
+
+	<sql id="queryByOrders">
+		<if test="orders!=null and orders.size()>0">
+			order by
+			<foreach collection="orders" item="o" separator=",">
+				${o.name} ${o.order}
+			</foreach>
+		</if>
+	</sql>
+
+</mapper>

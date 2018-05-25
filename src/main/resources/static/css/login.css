@@ -1,0 +1,118 @@
+/* CSS Document */
+body {
+	margin: 0;
+	padding: 0;
+	background: #1e3279;
+	width: auto;
+	height: auto;
+	color: #064b85;
+	font-family: Arial, Helvetica, sans-serif, "宋体";
+	font-size: 14px;
+	text-align: left;
+}
+
+.wrapper {
+	margin: 0 auto;
+	width: 1440px;
+	height: auto;
+	overflow: hidden;
+}
+
+.top {
+	display: block;
+}
+
+.left_one {
+	background: url(../images/login/left_bg_01.jpg) no-repeat;
+	width: 336px;
+	height: 257px;
+	float: left;
+}
+
+.center img {
+	float: left;
+	border: none;
+}
+
+.right_one {
+	background: url(../images/login/right_bg_01.jpg) no-repeat;
+	width: 384px;
+	height: 257px;
+	float: left;
+}
+
+.left_two {
+	background: url(../images/login/left_bg_02.jpg) no-repeat;
+	width: 336px;
+	height: 434px;
+	float: left;
+}
+
+.loginbox {
+	background: url(../images/login/login.jpg) no-repeat;
+	width: 720px;
+	height: 434px;
+	float: left;
+}
+
+.right_two {
+	background: url(../images/login/right_bg_02.jpg) no-repeat;
+	width: 384px;
+	height: 484px;
+	float: left;
+}
+
+.loginbox table {
+	margin: 43px 0 0 240px;
+	width: 290px;
+}
+
+.tdleft {
+	width: 45px;
+}
+
+.tdright {
+	width: 230px;
+}
+
+.loginbox table tr td {
+	font-weight: bold;
+	height: 39px;
+}
+
+.inputbox {
+	width: 220px;
+	height: 26px;
+	line-height: 22px;
+	background: none;
+	border: none;
+	margin-left: 20px;
+	color: #FFFFFF;
+	
+}
+
+input.inpushort {
+	width: 80px;
+	height: 26px;
+	line-height: 22px;
+	background: none;
+	border: none;
+	margin-left: 20px;
+	color: #FFFFFF;
+}
+
+a.loginbtn {
+	background: url(../images/login/btn.jpg) no-repeat;
+	width: 173px;
+	height: 46px;
+	display: block;
+	margin: 23px 0 0 65px;
+}
+
+a.loginbtn:hover {
+	background: url(../images/login/btn_hover.jpg) no-repeat;
+	width: 173px;
+	height: 46px;
+	display: block;
+	margin: 23px 0 0 65px;
+}

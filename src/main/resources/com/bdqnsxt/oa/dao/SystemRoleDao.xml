@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.SystemRoleDao">
+
+	<sql id="roleCol">
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+		roleName,description,departmentId
+	</sql>
+
+	<resultMap type="systemRole" id="basicSystemRoleMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+		<result column="roleName" property="roleName"/>
+		<result column="description" property="description"/>
+	</resultMap>
+
+	<resultMap type="systemRole" id="systemRoleMap" extends="com.bdqnsxt.oa.dao.SystemRoleDao.basicSystemRoleMap">
+		<collection  property="menus" column="{roleId=id}" fetchType="eager" ofType="string" select="com.bdqnsxt.oa.dao.SystemRoleDao.getMenusByRole" />
+		<collection  property="users" column="{roleId=id}" fetchType="eager" ofType="string" select="com.bdqnsxt.oa.dao.UserDao.getByRole" />
+		<collection  property="resources" column="{roleId=id}" fetchType="lazy" ofType="string" select="com.bdqnsxt.oa.dao.ResourceDao.getByRole" />
+	</resultMap>
+
+	<resultMap type="systemRole" id="systemRoleMenuMap" extends="com.bdqnsxt.oa.dao.SystemRoleDao.basicSystemRoleMap">
+		<collection  property="menus" column="{roleId=id}" fetchType="eager" ofType="string" select="com.bdqnsxt.oa.dao.SystemRoleDao.getMenusByRole" />
+	</resultMap>
+
+	<select id="getById" resultType="systemRole">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		from _systemrole where id=#{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getByIds" resultMap="systemRoleMenuMap">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		from _systemrole where id=#{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getByDepartment" resultMap="systemRoleMap">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		from _systemrole where departmentId=#{departmentId,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getBasicRole" resultType="systemRole">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		from _systemrole s join _department d on s.departmentId=d.id
+		where d.schoolId=1
+	</select>
+
+	<select id="getSystemRoleByUser" resultMap="systemRoleMap">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/> from _role_user ct join
+		_systemrole r on r.id = ct.roleId where ct.userId=#{id,jdbcType=NUMERIC}
+	</select>
+
+	<select id="getAll" resultType="systemRole">
+		select <include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		from _systemrole
+	</select>
+
+	<select id="getMenusByRole" resultType="string">
+		select menuId form 	from _role_menu where roleId=#{roleId,jdbcType=NUMERIC}
+	</select>
+
+	<insert id="save" parameterType="systemRole" useGeneratedKeys="true" keyProperty="id">
+		insert into _systemrole(
+		<include refid="com.bdqnsxt.oa.dao.SystemRoleDao.roleCol"/>
+		) values(
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+		#{roleName,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{department.id,jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<delete id="update" parameterType="systemRole">
+		update _systemrole set roleName=#{roleName,jdbcType=VARCHAR},
+		description=#{description,jdbcType=VARCHAR},
+		departmentId=#{department.id,jdbcType=NUMERIC},
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+	</delete>
+
+	<delete id="delete" parameterType="systemRole">
+		delete from _systemrole where id=#{id,jdbcType=NUMERIC}
+	</delete>
+	
+	<delete id="deleteRoleMenu">
+		delete from _role_menu where roleId=#{roleId,jdbcType=NUMERIC}
+	</delete>
+
+	<insert id="saveRoleMenu" useGeneratedKeys="true" keyProperty="id">
+		insert into _role_menu(id,roleId,menuId)  values
+		<foreach collection="menuIds" index="index" item="menuId" separator=",">
+			(#{id,jdbcType=NUMERIC},#{roleId,jdbcType=NUMERIC},#{menuId,jdbcType=NUMERIC})
+		</foreach>
+	</insert>
+
+	<select id="getVisibleMenusByRole" resultType="string">
+		select menuId from _role_menu where roleId = #{roleId,jdbcType=NUMERIC}
+	</select>
+</mapper>
