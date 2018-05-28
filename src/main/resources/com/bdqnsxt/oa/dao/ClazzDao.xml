@@ -128,4 +128,7 @@
         where schoolId = #{id,jdbcType=NUMERIC} and status = '开班'
     </select>
 
+    <delete id="deleteClazzTutors">
+        delete from _clazz_tutor where clazzId = #{clazzId,jdbcType=NUMERIC}
+    </delete>
 </mapper>

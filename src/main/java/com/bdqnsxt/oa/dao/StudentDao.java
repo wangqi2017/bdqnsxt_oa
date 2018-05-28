@@ -19,4 +19,5 @@ public interface StudentDao {
     List<Student> getByMobilePhoneId(@Param("id") long id, @Param("mobilePhone") String mobilePhone) throws Exception;
     void saveStudentClazzs(@Param("id") long id,@Param("stuId") long stuId, @Param("clazzId") long clazzId,@Param("createBy") String createBy,@Param("createOn") Date createOn) throws Exception;
     Student getById(long id) throws Exception;
+    Student getByIds(long id) throws Exception;
 }

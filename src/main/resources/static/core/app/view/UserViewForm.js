@@ -217,9 +217,10 @@ Ext.define("core.app.view.UserViewForm", {
                             margin: '5 0 0 5',
                             name: 'roleIds',
                             itemId: 'userroles',
-                            fieldLabel: '角色',
+                            fieldLabel: '角色<font color="red">*</font>',
                             displayField : 'roleName',
                             valueField : 'id',
+                            allowBlank: false,
                             store: Ext.create('Ext.data.Store', {
                                 fields: ['id', 'roleName'],
                                 proxy: {

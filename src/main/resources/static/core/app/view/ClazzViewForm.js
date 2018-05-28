@@ -6,7 +6,8 @@ Ext.define("core.app.view.ClazzViewForm", {
     extend: 'Ext.panel.Panel',
     alias: 'widget.clazzviewform',
     id: 'clazzviewformid',
-    requires: ['Ext.ux.form.ItemSelector'],
+    //requires: ['Ext.ux.form.ItemSelector'],
+    requires: ['core.widget.MultiSelector'],
     author: '100%',
     layout: 'fit',
     initComponent: function () {
@@ -219,6 +220,7 @@ Ext.define("core.app.view.ClazzViewForm", {
                         })
                     }
                     ,
+                    /*
                     {
                         xtype: 'itemselector',
                         name: 'tutors.ids',
@@ -244,6 +246,33 @@ Ext.define("core.app.view.ClazzViewForm", {
                             }
                         })
                     },
+                    */
+                    {
+                        xtype: 'multiselector',
+                        anchor: '90%',
+                        margin: '5 0 0 5',
+                        name: 'tutors.ids',
+                        itemId: 'tutors',
+                        id:'tutors',
+                        anchor: '90%',
+                        fieldLabel: '辅导员<font color="red">*</font>',
+                        displayField : 'fullname',
+                        valueField : 'id',
+                        allowBlank: false,
+                        store: Ext.create('Ext.data.Store', {
+                            fields: ['id', 'fullname'],
+                            proxy: {
+                                type: 'rest',
+                                reader: {
+                                    type: "json",
+                                    root: "data",
+                                    successProperty: 'success'
+                                }
+                            }
+                        })
+                    },
+
+
                     {
                         xtype: 'fieldcontainer',
                         height:

@@ -5,7 +5,7 @@ Ext.define('core.widget.MultiSelector',{
     editable : false,
     multiSelect : true,
     listConfig : {
-        itemTpl : Ext.create('Ext.XTemplate','<input type=checkbox>{[values.roleName]}'),
+        itemTpl : Ext.create('Ext.XTemplate','<input type=checkbox>{[values.roleName||values.fullname]}'),
         onItemSelect : function(record) {
             var node = this.getNode(record);
             if (node) {

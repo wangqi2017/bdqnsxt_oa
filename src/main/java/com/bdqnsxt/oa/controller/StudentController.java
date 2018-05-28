@@ -5,6 +5,7 @@ import com.bdqnsxt.oa.component.page.PageInfo;
 import com.bdqnsxt.oa.component.page.PageResult;
 import com.bdqnsxt.oa.dto.StudentDto;
 import com.bdqnsxt.oa.dto.StudentQueryDto;
+import com.bdqnsxt.oa.exception.ServiceException;
 import com.bdqnsxt.oa.exception.StudentExistException;
 import com.bdqnsxt.oa.model.Student;
 import com.bdqnsxt.oa.service.StudentService;
@@ -59,6 +60,8 @@ public class StudentController {
             return ResponseUtils.successExtJSProxyResponse("学员保存成功");
         } catch (StudentExistException e) {
             return ResponseUtils.failureExtJSProxyResponse(e.getMessage());
+        } catch(ServiceException e){
+            return ResponseUtils.failureExtJSProxyResponse(e.getMessage());
         }
     }
 
@@ -68,6 +71,8 @@ public class StudentController {
             studentService.update(new Student().getStudentCopy(dto));
             return ResponseUtils.successExtJSProxyResponse("学员修改成功");
         } catch (StudentExistException e) {
+            return ResponseUtils.failureExtJSProxyResponse(e.getMessage());
+        } catch(ServiceException e){
             return ResponseUtils.failureExtJSProxyResponse(e.getMessage());
         }
     }

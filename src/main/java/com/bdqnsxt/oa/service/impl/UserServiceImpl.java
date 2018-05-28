@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserUtils userUtils;
 
+
     @Transactional(readOnly = true)
     @Override
     public PageResult getList(BaseQuery bq) throws Exception {

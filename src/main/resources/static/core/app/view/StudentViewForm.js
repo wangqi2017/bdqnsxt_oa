@@ -124,7 +124,7 @@ Ext.define("core.app.view.StudentViewForm", {
                         itemId: 'studentclazz',
                         margin: '5 0 10 5',
                         name: 'currentClazz.id',
-                        fieldLabel: '所在班级<font color="red">*</font>',
+                        fieldLabel: '所在班级',
                         displayField: 'clname',
                         valueField: 'id',
                         emptyText: "--请选择--",

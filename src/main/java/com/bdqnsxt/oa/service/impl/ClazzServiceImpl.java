@@ -60,6 +60,10 @@ public class ClazzServiceImpl implements ClazzService {
         }
 
         clazzDao.update(clazz);
+        if(clazz.getTutors()!=null&&clazz.getTutors().size()>0){
+            clazzDao.deleteClazzTutors(clazz.getId());
+            clazzDao.saveClazzTutors(clazz.getId(),clazz.getTutors());
+        }
     }
 
     @Transactional(rollbackFor = {Throwable.class})

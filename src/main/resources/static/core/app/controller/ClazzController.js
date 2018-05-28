@@ -126,12 +126,21 @@ Ext.define("core.app.controller.ClazzController", {
                 id : clazzRecord.data['classLeader.id'],
                 fullname : clazzRecord.data['classLeader.fullname']
             });
+            var tutors = clazzRecord.data["tutors"];
+            var tutorTemp = [];
+            Ext.Array.each(tutors,function(name, index, itSelf){
+                var tutorModel = Ext.create("core.app.model.UserModel", {
+                    id : tutors[index].id,
+                    fullname : tutors[index].fullname
+                });
+                tutorTemp.push(tutorModel);
+            });
             clazzpanel.down('#clazzschool').setValue(schoolTemp);
             clazzpanel.down('#lecturer').setValue(lecturerTemp);
             clazzpanel.down('#classLeader').setValue(classLeaderTemp);
             //设置itemselector的值
-            var tutorsValue = record.data.tutors;
-            clazzpanel.down('#tutors').setValue(['3','4']);
+            clazzpanel.down('#classLeader').setValue(tutorTemp);
+            clazzpanel.down('#tutors').setValue(tutorTemp);
             AlertWin.alert('修改班级', null, clazzpanel, 600, 400);
         }
     },

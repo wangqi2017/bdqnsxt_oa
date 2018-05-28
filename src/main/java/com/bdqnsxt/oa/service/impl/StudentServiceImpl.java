@@ -2,24 +2,30 @@ package com.bdqnsxt.oa.service.impl;
 
 import com.bdqnsxt.oa.component.db.BaseQuery;
 import com.bdqnsxt.oa.component.page.PageResult;
+import com.bdqnsxt.oa.conf.application.GitServerConfig;
 import com.bdqnsxt.oa.dao.StudentDao;
 import com.bdqnsxt.oa.dao.UserDao;
 import com.bdqnsxt.oa.exception.ServiceException;
 import com.bdqnsxt.oa.exception.StudentExistException;
+import com.bdqnsxt.oa.model.Clazz;
 import com.bdqnsxt.oa.model.Student;
 import com.bdqnsxt.oa.model.User;
 import com.bdqnsxt.oa.service.StudentService;
 import com.bdqnsxt.oa.utils.UserUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
+    private Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     @Autowired
     private StudentDao studentDao;
@@ -27,6 +33,9 @@ public class StudentServiceImpl implements StudentService {
     private UserUtils userUtils;
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private GitServerConfig gitServerConfig;
 
     @Transactional(readOnly = true)
     @Override
@@ -46,6 +55,7 @@ public class StudentServiceImpl implements StudentService {
             //记录调班历史
             studentDao.saveStudentClazzs(0,student.getId(),student.getCurrentClazz().getId(), userUtils.getLoggedUser().getUsername(),new Date());
         }
+        checkAndCreateRepo(student);
     }
 
     @Transactional(rollbackFor = {Throwable.class})
@@ -60,6 +70,7 @@ public class StudentServiceImpl implements StudentService {
             //记录调班历史
             studentDao.saveStudentClazzs(0,student.getId(),student.getCurrentClazz().getId(),userUtils.getLoggedUser().getUsername(),new Date());
         }
+        checkAndCreateRepo(student);
     }
 
     @Transactional(rollbackFor = {Throwable.class})
@@ -67,4 +78,60 @@ public class StudentServiceImpl implements StudentService {
     public void delete(Student student) throws Exception {
         studentDao.delete(student);
     }
+
+    @Transactional(rollbackFor = {Throwable.class})
+    public synchronized void checkAndCreateRepo(Student student) throws Exception{
+        Student student1 = studentDao.getByIds(student.getId());
+        if(student1!=null&&student1.getCurrentClazz()!=null&&student1.getCurrentClazz().getId()>0 && Clazz.StatusEnum.开班.equals(student1.getCurrentClazz().getStatus())){
+            //基础路径
+            String basePath = gitServerConfig.getBasePath();
+            File baseDir = new File(basePath);
+            if(!baseDir.exists()){
+                baseDir.mkdir();
+            }
+            //班级路径
+            long clazzId = student1.getCurrentClazz().getId();
+            String clazzPath = basePath + File.separator + clazzId;
+            File clazzDir = new File(clazzPath);
+            if(!clazzDir.exists()){
+                clazzDir.mkdir();
+            }
+            //学员路径
+            long studentId = student1.getId();
+            String stuPath = clazzPath + File.separator + studentId;
+            File stuDir = new File(stuPath);
+            if(!stuDir.exists()){
+                stuDir.mkdir();
+            }
+
+            String practicePath = stuPath + File.separator + gitServerConfig.getPracticeRepo() + ".git ";
+            File praticeDir = new File(practicePath);
+            if(!praticeDir.exists()){
+                createRepo(stuPath,gitServerConfig.getPracticeRepo());
+            }
+            String projectPath = stuPath + File.separator + gitServerConfig.getProjectRepo() + ".git ";
+            File projectDir = new File(projectPath);
+            if(!projectDir.exists()){
+                createRepo(stuPath,gitServerConfig.getProjectRepo());
+            }
+
+        }
+    }
+
+    private void createRepo(String stuPath,String gitDir) throws Exception{
+        String cmd = gitServerConfig.getBaseCmd() + " cd " + stuPath
+                + " && git init --bare " + gitDir + ".git";
+        Process process = Runtime.getRuntime().exec(cmd);
+        int exitValue = 0;
+        try {
+            exitValue = process.waitFor();
+        }catch (InterruptedException e){
+            logger.error(e.getMessage(),e);
+        }
+        if(exitValue != 0){
+            throw new ServiceException("初始化仓库失败！");
+        }
+    }
+
+
 }

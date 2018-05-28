@@ -18,7 +18,7 @@ public class ClazzDto{
     @JsonProperty("lecturer.id")
     private long lecturerId;
     @JsonProperty("tutors.ids")
-    private String tutorIds;
+    private String[] tutorIds;
     @JsonProperty("classLeader.id")
     private long classLeaderId;
 
@@ -89,11 +89,11 @@ public class ClazzDto{
         this.lecturerId = lecturerId;
     }
 
-    public String getTutorIds() {
+    public String[] getTutorIds() {
         return tutorIds;
     }
 
-    public void setTutorIds(String tutorIds) {
+    public void setTutorIds(String[] tutorIds) {
         this.tutorIds = tutorIds;
     }
 

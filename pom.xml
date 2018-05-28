@@ -6,7 +6,7 @@
 	<groupId>com.bdqnsxt</groupId>
 	<artifactId>oa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>oa</name>
 	<description>OA Project for bdqnsxt</description>

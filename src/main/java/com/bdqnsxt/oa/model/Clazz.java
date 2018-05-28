@@ -145,18 +145,13 @@ public class Clazz extends AbstractModel{
             u.setId(dto.getClassLeaderId());
             this.classLeader = u;
         }
-        if(StringUtils.isNotEmpty(dto.getTutorIds())){
-            String[] ids = dto.getTutorIds().split(",");
-            if(ids!=null&&ids.length>0){
+        if(dto.getTutorIds()!=null&&dto.getTutorIds().length>0){
                 tutors = new ArrayList<>();
-                for(String id:ids){
+                for(String id:dto.getTutorIds()){
                     User tutor = new User();
                     tutor.setId(Long.valueOf(id));
                     tutors.add(tutor);
                 }
-            }
-
-
         }
         return this;
     }

@@ -52,6 +52,10 @@ Ext.define("core.app.model.ClazzModel", {
         name : "tutors",
         type : "array",
         sortable : true
+    },{
+        name : "tutors.ids",
+        type : "array",
+        sortable : true
     }],
 
     proxy: {

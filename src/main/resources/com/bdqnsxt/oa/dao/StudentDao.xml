@@ -54,6 +54,11 @@
                      select="com.bdqnsxt.oa.dao.StudentConsultDao.getByStudent"/>
     </resultMap>
 
+    <resultMap type="student" id="studentClazzMap" extends="com.bdqnsxt.oa.dao.StudentDao.basicStudentMap">
+        <association property="currentClazz" fetchType="eager" column="currentClazzId"
+                     select="com.bdqnsxt.oa.dao.ClazzDao.getById"/>
+    </resultMap>
+
 
 
     <select id="getListPage" resultMap="studentMap" parameterType="baseQuery">
@@ -134,6 +139,11 @@
     </select>
 
     <select id="getById" resultType="student">
+        select <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/> from
+        _student where id = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="getByIds" resultMap="studentClazzMap">
         select <include refid="com.bdqnsxt.oa.dao.StudentDao.stuCol"/> from
         _student where id = #{id,jdbcType=NUMERIC}
     </select>

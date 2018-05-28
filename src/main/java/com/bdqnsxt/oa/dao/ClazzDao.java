@@ -19,5 +19,6 @@ public interface ClazzDao {
     List<Clazz> getByClname(String clname) throws Exception;
     List<Clazz> getByClnameId(@Param("id") long id, @Param("clname") String clname) throws Exception;
     void saveClazzTutors(@Param("clazzId") long clazzId,@Param("tutors") List<User> tutors) throws Exception;
+    void deleteClazzTutors(@Param("clazzId") long clazzId) throws Exception;
     List<Clazz> getBySchool(long schoolId) throws Exception;
 }
