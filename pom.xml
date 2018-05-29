@@ -212,10 +212,12 @@
 	</dependencies>
 
 	<build>
+        <finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+
 				<!-- 远程调试
 				<configuration>
 					<jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</jvmArguments>
@@ -234,6 +236,7 @@
 
 
 			<!--混淆工具-->
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -284,6 +287,9 @@
 					</arguments>
 				</configuration>
 			</plugin>
+			-->
+
+
 		</plugins>
 	</build>
 
