@@ -242,14 +242,12 @@
             "expanded": true,
             "children": [
               {
-                "text": "校区流水管理",
-                "id": "finance_school_manager",
-                "leaf": true
-              },
-              {
                 "text": "财务审批管理",
                 "id": "finance_approval_manager",
-                "leaf": true
+                "leaf": true,
+                "funViewXtype": "financeapprovalview",
+                "funController": "core.app.controller.FinanceApprovalController",
+                "funViewName": "core.app.view.FinanceApprovalView"
               }
             ]
           }

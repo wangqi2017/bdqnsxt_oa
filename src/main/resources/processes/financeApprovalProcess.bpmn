@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1527756874091" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <message id="MSG_1"/>
+  <message id="MSG_2"/>
+  <process id="financeApprovalProcess" isClosed="false" isExecutable="true" name="financeApprovalProcess" processType="None">
+    <startEvent id="_2" name="StartEvent"/>
+    <userTask activiti:exclusive="true" id="financeApply" name="financeApply"/>
+    <sequenceFlow id="_5" sourceRef="_2" targetRef="financeApply"/>
+    <userTask activiti:assignee="aaa" activiti:candidateGroups="婵犵數鍋為崹鍫曞箹閳哄懎鍌ㄩ柤娴嬫櫇缁憋箑螖閿濆懎鏆欓柛鎰舵嫹闂備浇娉曢崰鎾存叏闂堟�?鎺楁晸閿燂拷" activiti:exclusive="true" id="financeApprove" name="financeApprove"/>
+    <sequenceFlow id="_3" sourceRef="financeApply" targetRef="financeApprove"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="_8" name="ExclusiveGateway"/>
+    <sequenceFlow id="_9" sourceRef="financeApprove" targetRef="_8"/>
+    <userTask activiti:candidateGroups="婵炴垶鎼╅崢鑲╃紦妤ｅ啫鍐�闁跨喓濮靛В锟�?" activiti:candidateUsers="aaa" activiti:exclusive="true" id="leaderApprove" name="leaderApprove"/>
+    <endEvent id="_6" name="EndEvent"/>
+    <sequenceFlow id="_10" sourceRef="_8" targetRef="_6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${finance.amount<=0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11" sourceRef="_8" targetRef="leaderApprove">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${finance.amount>0}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="financeApprovalProcess">
+      <bpmndi:BPMNShape bpmnElement="_2" id="Shape-_2">
+        <omgdc:Bounds height="32.0" width="32.0" x="45.0" y="165.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="financeApply" id="Shape-financeApply">
+        <omgdc:Bounds height="65.0" width="110.0" x="160.0" y="140.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="65.0" width="110.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="financeApprove" id="Shape-financeApprove">
+        <omgdc:Bounds height="55.0" width="85.0" x="370.0" y="145.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" id="Shape-_8" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="620.0" y="165.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leaderApprove" id="Shape-leaderApprove">
+        <omgdc:Bounds height="55.0" width="85.0" x="585.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" id="Shape-_6">
+        <omgdc:Bounds height="32.0" width="32.0" x="850.0" y="150.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="financeApply" targetElement="financeApprove">
+        <omgdi:waypoint x="270.0" y="172.5"/>
+        <omgdi:waypoint x="370.0" y="172.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_2" targetElement="financeApply">
+        <omgdi:waypoint x="77.0" y="181.0"/>
+        <omgdi:waypoint x="160.0" y="172.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9" sourceElement="financeApprove" targetElement="_8">
+        <omgdi:waypoint x="455.0" y="172.5"/>
+        <omgdi:waypoint x="620.0" y="181.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="BPMNEdge__11" sourceElement="_8" targetElement="leaderApprove">
+        <omgdi:waypoint x="636.0" y="197.0"/>
+        <omgdi:waypoint x="636.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="BPMNEdge__10" sourceElement="_8" targetElement="_6">
+        <omgdi:waypoint x="652.0" y="181.0"/>
+        <omgdi:waypoint x="850.0" y="166.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
