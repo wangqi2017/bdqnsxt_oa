@@ -55,7 +55,7 @@ Ext.define("core.app.view.UserView", {
                                 fields: ['id', 'roleName'],
                                 proxy: {
                                     type: 'rest',
-                                    url: "/allSystemRoles",
+                                    url: "/allroles",
                                     reader: {
                                         type: "json",
                                         root: "data",

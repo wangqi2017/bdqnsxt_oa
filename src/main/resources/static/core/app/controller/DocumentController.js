@@ -169,7 +169,7 @@ Ext.define("core.app.controller.DocumentController", {
     },
 
     deleteDocumentCategory:function (btn) {
-        var orgtp = btn.up("documentcateview").down('#documentcatetree');
+        var orgtp = btn.up("documentcateview").down('#documentcatetreeitemid');
         var record = orgtp.getSelectionModel().getSelection()[0];
         if (!record) {
             Ext.MessageBox.show({

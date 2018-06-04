@@ -7,7 +7,7 @@
 <mapper namespace="com.bdqnsxt.oa.dao.CommitCodeDao">
 
 	<sql id="col">
-		id,stuId,commitTime,addTotal,subTotal,changeTotal,commitName,commitMesg
+		id,stuId,commitTime,addTotal,subTotal,changeTotal,commitName,commitMesg,repoType,total
 	</sql>
 
 
@@ -22,8 +22,17 @@
 		#{subTotal,jdbcType=NUMERIC},
 		#{changeTotal,jdbcType=NUMERIC},
 		#{commitName,jdbcType=VARCHAR},
-		#{commitMesg,jdbcType=VARCHAR}
+		#{commitMesg,jdbcType=VARCHAR},
+		#{repoType,jdbcType=VARCHAR},
+		#{total,jdbcType=NUMERIC}
 		)
 	</insert>
+	
+	<select id="getList" parameterType="baseQuery" resultType="commitCode">
+		select id,date_format(commitTime,'%Y-%m-%d') commitTime,sum(addTotal) addTotal,
+		sum(subTotal) subTotal,sum(changeTotal) changeTotal, total  from _code
+		<include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+		 group by stuId,date_format(commitTime,'%Y-%m-%d') order by commitTime
+	</select>
 
 </mapper>

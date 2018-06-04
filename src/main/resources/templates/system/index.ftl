@@ -8,7 +8,9 @@
     <script src="js/sockjs.min.js"></script>
     <script src="js/stomp.min.js"></script>
     <script src="js/jquery.js"></script>
-
+    <!--
+    <script src="js/echarts.common.min.js"></script>
+    -->
     <script type="text/javascript">
         var username = "${ login_user.username}";
         var userId = "${ login_user.id}";

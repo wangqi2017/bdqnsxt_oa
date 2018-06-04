@@ -1,14 +1,18 @@
 package com.bdqnsxt.oa.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.*;
 
 public class CommitCode {
     private long id;
     private Student student;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date commitTime;
     private int  addTotal;
     private int  subTotal;
     private int  changeTotal;
+    private int  total;
     private String commitName;
     private String commitMesg;
     private RepoType repoType;
@@ -87,6 +91,14 @@ public class CommitCode {
 
     public void setRepoType(RepoType repoType) {
         this.repoType = repoType;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public CommitCode(long id, Student student, Date commitTime, int addTotal, int subTotal, int changeTotal, String commitName, String commitMesg, RepoType repoType) {

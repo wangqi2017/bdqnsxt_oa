@@ -207,7 +207,10 @@
                   {
                     "text": "<span style=\"font-weight:bold\">学员代码量统计</span>",
                     "id": "menu_codeview",
-                    "leaf": true
+                    "leaf": true,
+                    "funViewXtype": "codeview",
+                    "funController": "core.app.controller.StudentCodeController",
+                    "funViewName": "core.app.view.CodeView"
                   }
                 ]
               }

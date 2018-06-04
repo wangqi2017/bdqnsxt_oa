@@ -53,8 +53,7 @@ public class StudentServiceImpl implements StudentService {
     private UserUtils userUtils;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private CommitCodeDao commitCodeDao;
+
 
     @Autowired
     private GitServerConfig gitServerConfig;
@@ -173,135 +172,9 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
-    @Transactional()
+    @Transactional(readOnly = true)
     @Override
-    public void countCode() throws Exception{
-        List<Student> stus = studentDao.getActiveStudent();
-        for(Student stu:stus){
-            if(stu.getMobilePhone()!=null){
-                //统计练习库
-                /*
-                String practicePath = gitServerConfig.getBasePath() +  File.separator + stu.getMobilePhone()
-                        + File.separator + gitServerConfig.getPracticeRepo();
-               */
-                String practicePath = "F:\\IntelliJ_IDEA_space\\oa_bdqnsxt";
-                countAndSave(stu,practicePath, CommitCode.RepoType.PRACTICE);
-
-                //统计代码库
-                /*
-                String projectPath = gitServerConfig.getBasePath() +  File.separator + stu.getMobilePhone()
-                        + File.separator + gitServerConfig.getProjectRepo();
-                countAndSave(stu,projectPath, CommitCode.RepoType.PROJECT);
-                */
-
-            }
-        }
-    }
-
-    private void countAndSave(Student student,String repoPath,CommitCode.RepoType repoType) throws Exception{
-        Git git = Git.open(new File(repoPath));
-        if(git!=null) {
-            Repository repository = git.getRepository();
-            LogCommand logCommand = git.log();
-            Iterable<RevCommit> commits1 = logCommand.call();
-            //获取前一天提交
-            RevCommit preDayCommit = null;
-            for (RevCommit commit : commits1) {
-                Date date = commit.getAuthorIdent().getWhen();
-                if (date.compareTo(DateUtils.getTodayStartTime()) <= 0) {
-                    preDayCommit = commit;
-                    break;
-                }
-            }
-
-            //获取今天的提交，按顺序排列
-            List<RevCommit> todayCommits = new ArrayList<>();
-            Iterable<RevCommit> commits2 = git.log().call();
-            for (RevCommit commit : commits2) {
-                Date date = commit.getAuthorIdent().getWhen();
-                if (date.compareTo(DateUtils.getTodayStartTime()) > 0 && date.compareTo(DateUtils.getTodayEndTime()) < 0) {
-                    todayCommits.add(commit);
-                }
-            }
-
-            //包含昨天最后一次提交和今天的所有提交
-            todayCommits.add(preDayCommit);
-
-
-
-            for (int i = todayCommits.size() - 1; i > 0; i--) {
-                //第一次提交
-                if (i < 1) {
-                    return;
-                } else {
-                    AbstractTreeIterator newTree = prepareTreeParser(todayCommits.get(i), repository);
-                    AbstractTreeIterator oldTree = prepareTreeParser(todayCommits.get(i - 1), repository);
-                    List<DiffEntry> diff = git.diff().setOldTree(oldTree).setNewTree(newTree).setShowNameAndStatusOnly(true).call();
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    DiffFormatter df = new DiffFormatter(out);
-                    //设置比较器为忽略空白字符对比（Ignores all whitespace）
-                    df.setDiffComparator(RawTextComparator.WS_IGNORE_ALL);
-                    df.setRepository(git.getRepository());
-                    int addTotal = 0;
-                    int subTotal = 0;
-                    for (DiffEntry diffEntry : diff) {
-                        //打印文件差异具体内容
-                        df.format(diffEntry);
-                        String diffText = out.toString("UTF-8");
-                        System.out.println(diffText);
-
-                        //获取文件差异位置，从而统计差异的行数，如增加行数，减少行数
-                        FileHeader fileHeader = df.toFileHeader(diffEntry);
-                        List<HunkHeader> hunks = (List<HunkHeader>) fileHeader.getHunks();
-                        int addSize = 0;
-                        int subSize = 0;
-                        for (HunkHeader hunkHeader : hunks) {
-                            EditList editList = hunkHeader.toEditList();
-                            for (Edit edit : editList) {
-                                subSize += edit.getEndA() - edit.getBeginA();
-                                addSize += edit.getEndB() - edit.getBeginB();
-
-                            }
-                        }
-                        //System.out.println("addSize="+addSize);
-                        //System.out.println("subSize="+subSize);
-                        System.out.println("------------------------------end-----------------------------");
-                        out.reset();
-                        addTotal += addSize;
-                        subTotal += subSize;
-                    }
-                    System.out.println("addTotal=" + addTotal);
-                    System.out.println("subTotal=" + subTotal);
-
-                    Date commitTime = todayCommits.get(i - 1).getAuthorIdent().getWhen();
-                    int totalChange = addTotal - subTotal;
-                    String commitName = todayCommits.get(i - 1).getName();
-                    String commitMesg = todayCommits.get(i - 1).getFullMessage();
-
-                    CommitCode cc = new CommitCode(0, student, commitTime, addTotal, subTotal, totalChange, commitName, commitMesg, repoType);
-                    commitCodeDao.save(cc);
-                }
-            }
-        }
-    }
-
-    public AbstractTreeIterator prepareTreeParser(RevCommit commit,Repository repository){
-        System.out.println(commit.getId());
-        try (RevWalk walk = new RevWalk(repository)) {
-            System.out.println(commit.getTree().getId());
-            RevTree tree = walk.parseTree(commit.getTree().getId());
-
-            CanonicalTreeParser oldTreeParser = new CanonicalTreeParser();
-            try (ObjectReader oldReader = repository.newObjectReader()) {
-                oldTreeParser.reset(oldReader, tree.getId());
-            }
-
-            walk.dispose();
-
-            return oldTreeParser;
-        }catch (Exception e) {
-            // TODO: handle exception
-        }
-        return null;
+    public List<Student> getByClazz(long currentClazzId) throws Exception {
+        return studentDao.getByClazz(currentClazzId);
     }
 }

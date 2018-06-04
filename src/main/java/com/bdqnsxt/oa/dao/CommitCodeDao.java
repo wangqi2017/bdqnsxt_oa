@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface CommitCodeDao {
     void save(CommitCode commitCode) throws Exception;
+    List<CommitCode> getList(BaseQuery baseQuery) throws Exception;
 }

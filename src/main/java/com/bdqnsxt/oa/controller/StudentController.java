@@ -8,6 +8,7 @@ import com.bdqnsxt.oa.dto.StudentQueryDto;
 import com.bdqnsxt.oa.exception.ServiceException;
 import com.bdqnsxt.oa.exception.StudentExistException;
 import com.bdqnsxt.oa.model.Student;
+import com.bdqnsxt.oa.service.StudentCodeService;
 import com.bdqnsxt.oa.service.StudentService;
 import com.bdqnsxt.oa.utils.ResponseUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,11 +31,12 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @RequestMapping(value = "/testCode", method = RequestMethod.GET)
-    public String testCode() throws Exception{
-        studentService.countCode();
-        return "test";
+    @RequestMapping(value = "/getByClazz", method = RequestMethod.GET)
+    public Map<String, Object> getByClazz(Long clazzId) throws Exception {
+        List<Student> students = studentService.getByClazz(clazzId);
+        return ResponseUtils.successExtJSProxyResponse(students, "");
     }
+
 
     @RequestMapping(value = "/students", method = RequestMethod.GET)
     public Map<String, Object> getListPage(StudentQueryDto dto, PageInfo pageInfo) throws Exception {
