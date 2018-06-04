@@ -9,6 +9,7 @@ import com.bdqnsxt.oa.model.RoleMenu;
 import com.bdqnsxt.oa.model.SystemRole;
 import com.bdqnsxt.oa.service.SystemRoleService;
 import com.bdqnsxt.oa.utils.MenuUtils;
+import com.bdqnsxt.oa.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public class SystemRoleServiceImpl implements SystemRoleService {
 
     @Autowired
     private SystemRoleDao systemRoleDao;
+
+    @Autowired
+    private UserUtils userUtils;
 
     @Transactional(readOnly = true)
     @Override
@@ -92,5 +96,16 @@ public class SystemRoleServiceImpl implements SystemRoleService {
     @Override
     public List<SystemRole> getBasicRole() throws Exception {
         return systemRoleDao.getBasicRole();
+    }
+
+    @Override
+    public boolean containsRole(String roleName) throws Exception {
+        List<SystemRole> roles = userUtils.getLoggedUser().getRoles();
+        for(SystemRole role:roles){
+            if(role.getRoleName().equals(roleName)){
+                return true;
+            }
+        }
+        return false;
     }
 }

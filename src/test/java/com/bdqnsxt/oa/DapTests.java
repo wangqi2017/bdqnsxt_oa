@@ -5,7 +5,6 @@ import com.bdqnsxt.oa.dao.UserDao;
 import com.bdqnsxt.oa.enums.GenderEnum;
 import com.bdqnsxt.oa.model.User;
 import com.bdqnsxt.oa.service.impl.UserServiceImpl;
-import org.activiti.engine.RepositoryService;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;

@@ -225,6 +225,7 @@ Ext.define("core.app.controller.DocumentController", {
                     method : "POST",
                     success : function(form, action) {
                         // 上传成功
+
                         if (action.result.success == "true") {
                             // 重新load 清单树
                             if (me.loadstore) {

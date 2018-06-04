@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.FinanceDao">
+
+    <sql id="aliasCol">
+        f.id as id,f.createByUsername as createByUsername,f.createOn as createOn,
+        f.updateByUsername as updateByUsername,f.updateOn as updateOn,f.createByUserId as createByUserId,
+        f.updateByUserId as updateByUserId,f.schoolId schoolId, f.proposerId proposerId,
+        f.amount amount,f.financeType financeType,f.details details,f.applyTime applyTime,
+        f.fileLocations fileLocations,f.financeApprovalerId financeApprovalerId,
+        f.financeApprovalTime financeApprovalTime,f.financeApprovalOpin financeApprovalOpin,
+        f.centerApprovalerId centerApprovalerId,f.centerAprrovalTime centerAprrovalTime,
+        f.centerApprovalOpin centerApprovalOpin,f.approvalStatus approvalStatus,
+        f.processStatus processStatus
+    </sql>
+
+    <sql id="applyCol">
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
+        schoolId,proposerId,amount,financeType,details,applyTime,fileLocations,processStatus
+    </sql>
+
+    <resultMap type="finance" id="basicFinanceMap" extends="com.bdqnsxt.oa.dao.BaseDao.basicMap">
+        <result column="amount" property="amount"/>
+        <result column="financeType" property="financeType"/>
+        <result column="details" property="details"/>
+        <result column="applyTime" property="applyTime"/>
+        <result column="fileLocations" property="fileLocations"/>
+        <result column="financeApprovalTime" property="financeApprovalTime"/>
+        <result column="financeApprovalOpin" property="financeApprovalOpin"/>
+        <result column="centerAprrovalTime" property="centerAprrovalTime"/>
+        <result column="centerApprovalOpin" property="centerApprovalOpin"/>
+        <result column="approvalStatus" property="approvalStatus"/>
+        <result column="processStatus" property="processStatus"/>
+    </resultMap>
+
+    <resultMap type="finance" id="basicMap" extends="com.bdqnsxt.oa.dao.FinanceDao.basicFinanceMap">
+        <association property="school" fetchType="eager" column="{id=schoolId}" select="com.bdqnsxt.oa.dao.SchoolDao.getById"/>
+        <association property="proposer" fetchType="eager" column="{id=proposerId}" select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+        <association property="financeApprovaler" fetchType="eager" column="{id=financeApprovalerId}" select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+        <association property="centerApprovaler" fetchType="eager" column="{id=centerApprovalerId}" select="com.bdqnsxt.oa.dao.UserDao.getById"/>
+    </resultMap>
+
+    <select id="getListPage" resultMap="basicMap" parameterType="baseQuery">
+        select
+        <include refid="com.bdqnsxt.oa.dao.FinanceDao.aliasCol"/>
+        from _finance f join _user p on f.proposerId = p.id
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByConditions"/>
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.queryByOrders"/>
+    </select>
+
+    <select id="getById" resultType="finance">
+        select <include refid="com.bdqnsxt.oa.dao.FinanceDao.aliasCol"/>
+        from _finance f where id = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <insert id="apply" parameterType="finance" useGeneratedKeys="true" keyProperty="id">
+        insert into _finance(
+          <include refid="com.bdqnsxt.oa.dao.FinanceDao.applyCol"/>
+        ) values(
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicInsert"/>
+        #{school.id,jdbcType=NUMERIC},
+        #{proposer.id,jdbcType=NUMERIC},
+        #{amount,jdbcType=NUMERIC},
+        #{financeType,jdbcType=VARCHAR},
+        #{details,jdbcType=VARCHAR},
+        #{applyTime,jdbcType=TIMESTAMP},
+        #{fileLocations,jdbcType=VARCHAR},
+        #{processStatus,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="finance">
+        update _finance set schoolId=#{school.id,jdbcType=NUMERIC},
+        amount=#{amount,jdbcType=NUMERIC},financeType=#{financeType,jdbcType=VARCHAR},
+        details=#{details,jdbcType=VARCHAR},fileLocations=#{fileLocations,jdbcType=VARCHAR},
+        <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
+    </update>
+
+    <update id="approval" parameterType="finance">
+        update _finance
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id,jdbcType=NUMERIC} ">
+            updateByUsername=#{updateByUsername,jdbcType=VARCHAR},updateOn=#{updateOn,jdbcType=TIMESTAMP},
+            updateByUserId=#{updateByUserId,jdbcType=NUMERIC},
+            <if test="processStatus != null"> processStatus=#{processStatus,jdbcType=VARCHAR} , </if>
+            <if test="financeApprovalTime != null"> financeApprovalTime=#{financeApprovalTime,jdbcType=TIMESTAMP} , </if>
+            <if test="financeApprovaler != null and financeApprovaler.id >0"> financeApprovalerId=#{financeApprovaler.id,jdbcType=NUMERIC} , </if>
+            <if test="financeApprovalOpin != null and financeApprovalOpin.length()>0"> financeApprovalOpin=#{financeApprovalOpin,jdbcType=VARCHAR} , </if>
+            <if test="centerAprrovalTime != null"> centerAprrovalTime=#{centerAprrovalTime,jdbcType=TIMESTAMP} , </if>
+            <if test="centerApprovaler != null and centerApprovaler.id>0"> centerApprovalerId=#{centerApprovaler.id,jdbcType=NUMERIC} , </if>
+            <if test="centerApprovalOpin != null and centerApprovalOpin.length()>0"> centerApprovalOpin=#{centerApprovalOpin,jdbcType=VARCHAR} , </if>
+        </trim>
+    </update>
+</mapper>

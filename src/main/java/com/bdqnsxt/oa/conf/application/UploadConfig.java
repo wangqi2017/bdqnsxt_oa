@@ -16,4 +16,14 @@ public class UploadConfig {
    public void setUploadPath(String uploadPath) {
       this.uploadPath = uploadPath;
    }
+
+   private String financePath;
+
+   public String getFinancePath() {
+      return financePath;
+   }
+
+   public void setFinancePath(String financePath) {
+      this.financePath = financePath;
+   }
 }

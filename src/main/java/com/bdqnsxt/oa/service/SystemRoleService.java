@@ -21,5 +21,6 @@ public interface SystemRoleService {
     Menu getTreeMenu(long roleId) throws Exception;
     void updateRoleMenus(RoleMenu rm) throws Exception;
     void copyRoleMenus(RoleMenu rm) throws Exception;
+    boolean containsRole(String roleName) throws Exception;
 
 }

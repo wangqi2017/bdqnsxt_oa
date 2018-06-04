@@ -36,6 +36,15 @@ public class FileUtils {
         return uploadDirectory;
     }
 
+    public File getFinanceDirectory(){
+        String uploadPath = uploadConfig.getFinancePath();
+        File uploadDirectory = new File(uploadPath);
+        if(!uploadDirectory.exists()){
+            uploadDirectory.mkdir();
+        }
+        return uploadDirectory;
+    }
+
     public String getUploadPath(){
         return uploadConfig.getUploadPath();
     }

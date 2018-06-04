@@ -42,6 +42,14 @@ public class UserController {
         return ResponseUtils.successExtJSProxyResponse(users,"");
     }
 
+    @RequestMapping(value="/getApprovalers",method = RequestMethod.GET)
+    public Map<String, Object> getApprovalByRoles() throws Exception{
+        BaseQuery bq = new BaseQuery();
+        String[] roleNames = new String[]{"财务","出纳"};
+        List<User> users =userService.getByRoleNames(bq,roleNames);
+        return ResponseUtils.successExtJSProxyResponse(users,"");
+    }
+
     @RequestMapping(value="/users",method = RequestMethod.GET)
     public Map<String, Object> getListPage(UserQueryDto uq, PageInfo pageInfo) throws Exception{
         BaseQuery bq = new BaseQuery();

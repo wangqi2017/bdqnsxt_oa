@@ -28,7 +28,9 @@ public class DataAccessAspect {
 
     @Pointcut("execution(public * com.bdqnsxt.oa.service..*.get*(..)) " +
             "&& !(execution(public * com.bdqnsxt.oa.service.School*.get*(..)))" +
-            "&& !(execution(public * com.bdqnsxt.oa.service.Document*.get*(..)))")
+            "&& !(execution(public * com.bdqnsxt.oa.service.Document*.get*(..)))" +
+            "&& !(execution(public * com.bdqnsxt.oa.service.Finance*.get*(..)))"
+    )
     public void getListPoint(){}
 
     @Autowired
