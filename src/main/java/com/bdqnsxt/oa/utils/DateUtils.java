@@ -1,9 +1,12 @@
 package com.bdqnsxt.oa.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
+
+    public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd";
 
     public static Date getStartTime(Date date) {
         if(date==null){
@@ -37,5 +40,15 @@ public class DateUtils {
 
     public static Date getTodayEndTime() {
         return getEndTime(new Date());
+    }
+
+    public static String getDateFormat(Date date,String format){
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        String f = sdf.format(date);
+        return f;
+    }
+
+    public static String getDateSimpleFormat(Date date){
+        return getDateFormat(date,SIMPLE_DATE_FORMAT);
     }
 }

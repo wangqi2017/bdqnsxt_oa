@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
@@ -97,8 +99,8 @@ public class StudentServiceImpl implements StudentService {
                 clazzDir.mkdir();
             }
             //学员路径
-            long studentId = student1.getId();
-            String stuPath = clazzPath + File.separator + studentId;
+            String studentPhone = student1.getMobilePhone();
+            String stuPath = clazzPath + File.separator + studentPhone;
             File stuDir = new File(stuPath);
             if(!stuDir.exists()){
                 stuDir.mkdir();
@@ -120,17 +122,37 @@ public class StudentServiceImpl implements StudentService {
 
     private void createRepo(String stuPath,String gitDir) throws Exception{
         String cmd = gitServerConfig.getBaseCmd() + " cd " + stuPath
-                + " && git init --bare " + gitDir + ".git";
-        Process process = Runtime.getRuntime().exec(cmd);
+                + "  && git init --bare " + gitDir + ".git";
+        cmd = cmd.replace('\\','/');
+        BufferedReader br = null;
+        Process process = null;
         int exitValue = 0;
         try {
+            process = Runtime.getRuntime().exec(cmd);
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             exitValue = process.waitFor();
-        }catch (InterruptedException e){
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            logger.debug(sb.toString());
+            if(exitValue != 0){
+                throw new ServiceException("初始化仓库失败！");
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(),e);
+        }finally{
+            if (br != null)
+            {
+                try {
+                    br.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        if(exitValue != 0){
-            throw new ServiceException("初始化仓库失败！");
-        }
+
     }
 
 

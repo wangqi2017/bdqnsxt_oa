@@ -20,20 +20,22 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class DapTests {
 
     //@Autowired
     //private RepositoryService repositoryService;
 
-
+    @Test
+    public void test() throws Exception{}
 
     /*
 	@Autowired
 	private UserDao userDao;
 
 	private Logger log = LoggerFactory.getLogger(DapTests.class);
+
 
 
 	@Test
