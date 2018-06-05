@@ -12,6 +12,7 @@ import java.util.List;
 public interface StudentDao {
     List<Student> getListPage(BaseQuery bq) throws Exception;
     List<Student> getByClazz(long currentClazzId) throws Exception;
+    List<Student> getActiveStudent() throws Exception;
     void save(Student student) throws Exception;
     void update(Student student) throws Exception;
     void delete(Student student) throws Exception;

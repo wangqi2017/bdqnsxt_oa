@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class GitServerConfig {
 
     private String basePath;
-    private String baseCmd;
     private String practiceRepo;
     private String projectRepo;
 
@@ -18,14 +17,6 @@ public class GitServerConfig {
 
     public void setBasePath(String basePath) {
         this.basePath = basePath;
-    }
-
-    public String getBaseCmd() {
-        return baseCmd;
-    }
-
-    public void setBaseCmd(String baseCmd) {
-        this.baseCmd = baseCmd;
     }
 
     public String getPracticeRepo() {

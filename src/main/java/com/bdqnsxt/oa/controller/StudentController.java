@@ -29,6 +29,12 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @RequestMapping(value = "/testCode", method = RequestMethod.GET)
+    public String testCode() throws Exception{
+        studentService.countCode();
+        return "test";
+    }
+
     @RequestMapping(value = "/students", method = RequestMethod.GET)
     public Map<String, Object> getListPage(StudentQueryDto dto, PageInfo pageInfo) throws Exception {
         BaseQuery bq = new BaseQuery();

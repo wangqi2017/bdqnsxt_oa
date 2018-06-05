@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqnsxt.oa.dao.CommitCodeDao">
+
+	<sql id="col">
+		id,stuId,commitTime,addTotal,subTotal,changeTotal,commitName,commitMesg
+	</sql>
+
+
+	<insert id="save" parameterType="commitCode" useGeneratedKeys="true" keyProperty="id">
+		insert into _code(
+		<include refid="com.bdqnsxt.oa.dao.CommitCodeDao.col"/>
+		) values(
+		#{id,jdbcType=NUMERIC},
+		#{student.id,jdbcType=NUMERIC},
+		#{commitTime,jdbcType=TIMESTAMP},
+		#{addTotal,jdbcType=NUMERIC},
+		#{subTotal,jdbcType=NUMERIC},
+		#{changeTotal,jdbcType=NUMERIC},
+		#{commitName,jdbcType=VARCHAR},
+		#{commitMesg,jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

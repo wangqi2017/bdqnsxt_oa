@@ -4,6 +4,7 @@ import com.bdqnsxt.oa.component.db.BaseQuery;
 import com.bdqnsxt.oa.dao.UserDao;
 import com.bdqnsxt.oa.enums.GenderEnum;
 import com.bdqnsxt.oa.model.User;
+import com.bdqnsxt.oa.service.impl.StudentServiceImpl;
 import com.bdqnsxt.oa.service.impl.UserServiceImpl;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,8 +28,13 @@ public class DapTests {
     //@Autowired
     //private RepositoryService repositoryService;
 
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
+
     @Test
-    public void test() throws Exception{}
+    public void test() throws Exception{
+        //studentServiceImpl.countCode();
+    }
 
     /*
 	@Autowired

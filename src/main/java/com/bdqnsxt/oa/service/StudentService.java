@@ -10,4 +10,5 @@ public interface StudentService {
     void save(Student student) throws Exception;
     void update(Student student) throws Exception;
     void delete(Student student) throws Exception;
+    void countCode() throws Exception;
 }

@@ -59,6 +59,11 @@
                      select="com.bdqnsxt.oa.dao.ClazzDao.getById"/>
     </resultMap>
 
+    <select id="getActiveStudent" resultMap="studentMap">
+        select
+        <include refid="com.bdqnsxt.oa.dao.StudentDao.aliasCol"/>
+        from _student s join _clazz c on s.currentClazzId=c.id where c.status='开班'
+    </select>
 
 
     <select id="getListPage" resultMap="studentMap" parameterType="baseQuery">
