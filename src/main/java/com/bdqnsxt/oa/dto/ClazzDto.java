@@ -1,6 +1,6 @@
 package com.bdqnsxt.oa.dto;
 
-import com.bdqnsxt.oa.model.*;
+import com.bdqnsxt.oa.model.Clazz;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -22,6 +22,15 @@ public class ClazzDto{
     @JsonProperty("classLeader.id")
     private long classLeaderId;
 
+    private String clazzLevel;
+
+    public String getClazzLevel() {
+        return clazzLevel;
+    }
+
+    public void setClazzLevel(String clazzLevel) {
+        this.clazzLevel = clazzLevel;
+    }
 
     public long getId() {
         return id;

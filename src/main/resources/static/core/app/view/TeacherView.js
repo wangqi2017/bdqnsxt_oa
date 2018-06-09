@@ -40,7 +40,7 @@ Ext.define("core.app.view.TeacherView", {
                         }, {
                             xtype: 'combobox',
                             anchor: '90%',
-                            margin: '5 0 10 5',
+                            margin: '5 0 10 60',
                             name: 'schoolId',
                             fieldLabel: '所属校区',
                             displayField: 'scname',

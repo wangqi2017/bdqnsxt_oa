@@ -8,7 +8,7 @@
 
     <sql id="clCol">
         <include refid="com.bdqnsxt.oa.dao.BaseDao.basicCol"/>
-        clname,orientation,schoolId,startDate,endDate,status,lecturerId,classLeaderId
+        clname,orientation,schoolId,startDate,endDate,status,lecturerId,classLeaderId,clazzLevel
     </sql>
 
     <resultMap type="clazz" id="basicClazzMap">
@@ -24,6 +24,7 @@
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
         <result column="status" property="status"/>
+        <result column="clazzLevel" property="clazzLevel"/>
     </resultMap>
 
     <resultMap type="clazz" id="clazzMap" extends="com.bdqnsxt.oa.dao.ClazzDao.basicClazzMap">
@@ -77,7 +78,8 @@
         #{endDate,jdbcType=DATE},
         #{status,jdbcType=VARCHAR},
         #{lecturer.id,jdbcType=NUMERIC},
-        #{classLeader.id,jdbcType=NUMERIC}
+        #{classLeader.id,jdbcType=NUMERIC},
+        #{clazzLevel,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -85,7 +87,7 @@
 		update _clazz set clname=#{clname,jdbcType=VARCHAR},orientation=#{orientation,jdbcType=VARCHAR},
 		schoolId=#{belongSchool.id,jdbcType=NUMERIC},startDate=#{startDate,jdbcType=DATE},
 		endDate=#{endDate,jdbcType=DATE},status=#{status,jdbcType=VARCHAR},lecturerId=#{lecturer.id,jdbcType=NUMERIC},
-		classLeaderId=#{classLeader.id,jdbcType=NUMERIC},
+		classLeaderId=#{classLeader.id,jdbcType=NUMERIC},clazzLevel=#{clazzLevel,jdbcType=VARCHAR},
         <include refid="com.bdqnsxt.oa.dao.BaseDao.basicUpdate"/>
 	</update>
 

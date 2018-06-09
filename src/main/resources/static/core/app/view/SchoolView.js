@@ -41,7 +41,7 @@ Ext.define("core.app.view.SchoolView", {
                                 xtype: 'combobox',
                                 anchor: '90%',
                                 itemId: 'organization',
-                                margin: '5 0 10 5',
+                                margin: '5 0 10 60',
                                 name: 'organization',
                                 fieldLabel: '所属机构',
                                 allowBlank: false,

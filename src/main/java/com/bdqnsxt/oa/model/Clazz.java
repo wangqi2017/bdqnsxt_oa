@@ -27,13 +27,22 @@ public class Clazz extends AbstractModel{
     //班主任
     private User   classLeader;
     private List<Student> students;
-
+    private String clazzLevel;
     public enum OrientationEnum{
-        JAVA工程师,UI设计,大数据工程师
+        ACCP,学士后JAVA,UI设计师,大数据工程师,
+        学士后NET,php工程师,python工程师,淘宝电商,网络运维
     }
 
     public enum StatusEnum{
         未开班,试听,开班,结束
+    }
+
+    public String getClazzLevel() {
+        return clazzLevel;
+    }
+
+    public void setClazzLevel(String clazzLevel) {
+        this.clazzLevel = clazzLevel;
     }
 
     public String getClname() {

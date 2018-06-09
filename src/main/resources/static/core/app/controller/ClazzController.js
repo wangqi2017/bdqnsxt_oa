@@ -32,8 +32,42 @@ Ext.define("core.app.controller.ClazzController", {
             },
             'clazzview button[ref=deleteclazz]' : {
                 click : _self.deleteClazz
+            },
+            'clazzviewform #clazzorientation' :{
+                'change' : function (combo,newValue,oldValue,eOpts) {
+                    if(newValue == 'ACCP'){
+                        combo.up('form').down('#clazzlevelitemid').show();
+                    }else{
+                        combo.up('form').down('#clazzlevelitemid').hide();
+                    }
+                    this.setClazzName(combo,newValue,oldValue,eOpts);
+                }
+            },
+            'clazzviewform #startdateitemid':{
+                'change' : _self.setClazzName
+            },
+            'clazzviewform #clazzlevelitemid':{
+                'change' : _self.setClazzName
             }
         });
+    },
+
+    setClazzName: function (compent,newValue,oldValue,eOpts) {
+        var clname;
+        var orientValue = compent.up('form').down('#clazzorientation').getValue();
+        var levelRadio = compent.up('form').down('#clazzlevelitemid').getChecked()[0];
+        var startDate = compent.up('form').down('#startdateitemid').getValue();
+        var start = Ext.util.Format.date(startDate,'Y-m-d');
+        if(orientValue !=null && start!=null){
+            if(levelRadio == null){
+                clname = orientValue + "_" + start;
+                compent.up('form').down('#clnameitemid').setValue(clname);
+            }else{
+                clname = orientValue + "_" + levelRadio.boxLabel + "_" + start;
+                compent.up('form').down('#clnameitemid').setValue(clname);
+            }
+        }
+
     },
 
     searchClazz : function(btn, e) {
@@ -161,6 +195,7 @@ Ext.define("core.app.controller.ClazzController", {
         } else {
             Ext.MessageBox.confirm("标题", "你要删除这个班级吗？", function(btn) {
                 if (btn == 'yes') {
+                    record.data['tutors.ids'] = [];
                     record.destroy({
                         scope : this,
                         callback : function(response, opts) {

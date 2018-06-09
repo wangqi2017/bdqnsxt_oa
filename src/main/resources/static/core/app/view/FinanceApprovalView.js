@@ -53,7 +53,7 @@ Ext.define("core.app.view.FinanceApprovalView", {
                     },{
                         xtype: 'combobox',
                         anchor: '90%',
-                        margin: '5 0 10 5',
+                        margin: '5 0 10 60',
                         name: 'processStatus',
                         fieldLabel: '审批状态',
                         displayField: 'name',
@@ -78,7 +78,7 @@ Ext.define("core.app.view.FinanceApprovalView", {
                     },{
                         xtype: 'combobox',
                         anchor: '90%',
-                        margin: '5 0 10 5',
+                        margin: '5 0 10 60',
                         name: 'financeApprovalerId',
                         fieldLabel: '财务审批人',
                         displayField: 'fullname',

@@ -23,19 +23,7 @@ Ext.define("core.app.view.ClazzViewForm", {
                     margin: '5 0 0 5',
                     name: 'id',
                     hidden: true
-                },
-
-                    {
-                        xtype: 'textfield',
-                        anchor: '90%',
-                        margin: '5 0 0 5',
-                        name: 'clname',
-                        allowBlank: false,
-                        minLength: 6,
-                        fieldLabel: '班级名<font color="red">*</font>'
-
-                    },
-                    {
+                },{
                         xtype: 'combobox',
                         anchor: '90%',
                         itemId: 'clazzorientation',
@@ -49,16 +37,78 @@ Ext.define("core.app.view.ClazzViewForm", {
                         store: Ext.create('Ext.data.Store', {
                             fields: ['value', 'name'],
                             data: [{
-                                "value": "JAVA工程师",
-                                "name": "JAVA工程师"
+                                "value": "ACCP",
+                                "name": "ACCP"
                             }, {
-                                "value": "UI设计",
-                                "name": "UI设计"
+                                "value": "学士后JAVA",
+                                "name": "学士后JAVA"
+                            }, {
+                                "value": "UI设计师",
+                                "name": "UI设计师"
                             }, {
                                 "value": "大数据工程师",
                                 "name": "大数据工程师"
+                            }, {
+                                "value": "学士后NET",
+                                "name": "学士后NET"
+                            }, {
+                                "value": "php工程师",
+                                "name": "php工程师"
+                            }, {
+                                "value": "python工程师",
+                                "name": "python工程师"
+                            }, {
+                                "value": "淘宝电商",
+                                "name": "淘宝电商"
+                            }, {
+                                "value": "网络运维",
+                                "name": "网络运维"
                             }]
                         })
+                    },
+                    {
+                        itemId: 'clazzlevelitemid',
+                        hidden: true,
+                        xtype: 'radiogroup',
+                        anchor: '90%',
+                        margin: '5 0 10 5',
+                        fieldLabel: '课程阶段',
+                        defaultType: 'radio',
+                        layout:'hbox',
+                        items:[{
+                            boxLabel : '初级',
+                            inputValue : '初级',
+                            name: 'clazzLevel'
+                        },{
+                            boxLabel : '中级',
+                            inputValue : '中级',
+                            name: 'clazzLevel'
+                        },{
+                            boxLabel : '高级',
+                            inputValue : '高级',
+                            name: 'clazzLevel'
+                        }]
+                    },
+                    {
+                        xtype: 'datefield',
+                        anchor: '90%',
+                        itemId: 'startdateitemid',
+                        margin: '5 0 0 5',
+                        name: 'startDate',
+                        format: 'Y-m-d',
+                        allowBlank: false,
+                        fieldLabel: '开始时间<font color="red">*</font>'
+                    },
+                    {
+                        xtype: 'textfield',
+                        readOnly: true,
+                        itemId:'clnameitemid',
+                        anchor: '90%',
+                        margin: '5 0 0 5',
+                        name: 'clname',
+                        allowBlank: false,
+                        minLength: 6,
+                        fieldLabel: '班级名<font color="red">*</font>'
                     },
                     {
                         xtype: 'combobox',
@@ -125,16 +175,6 @@ Ext.define("core.app.view.ClazzViewForm", {
                             }
                         }
                     },
-                    {
-                        xtype: 'datefield',
-                        anchor: '90%',
-                        margin: '5 0 0 5',
-                        name: 'startDate',
-                        format: 'Y-m-d',
-                        allowBlank: false,
-                        fieldLabel: '开始时间<font color="red">*</font>'
-                    }
-                    ,
                     {
                         xtype: 'datefield',
                         anchor:  '90%',

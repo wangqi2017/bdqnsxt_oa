@@ -39,7 +39,7 @@ Ext.define("core.app.view.StudentView", {
                                 fieldLabel: '学员名称'
                             }, {
                                 xtype: 'textfield',
-                                margin: '5 0 0 10',
+                                margin: '5 0 0 60',
                                 name: 'mobilePhone',
                                 fieldLabel: '手机号'
                             }, {
@@ -96,7 +96,7 @@ Ext.define("core.app.view.StudentView", {
                                 xtype: 'combobox',
                                 anchor: '90%',
                                 itemId: 'lockId',
-                                margin: '5 0 0 10',
+                                margin: '5 0 0 60',
                                 name: 'lockId',
                                 fieldLabel: '锁定人',
                                 displayField: 'fullname',

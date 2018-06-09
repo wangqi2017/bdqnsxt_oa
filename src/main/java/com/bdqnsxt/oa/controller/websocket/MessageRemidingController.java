@@ -26,6 +26,7 @@ public class MessageRemidingController {
 
 
     //@Scheduled(fixedRate = 5000)
+    //每天早上9点，下午2点6点
     @Scheduled(cron= "0 0 9,14,18 * * ?")
     public void getStudentConsultRemiding() throws Exception{
         List<StudentConsult> studentConsults = studentConsultDao.getRemindList(DateUtils.getTodayStartTime(),

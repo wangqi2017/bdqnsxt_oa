@@ -9,6 +9,10 @@ Ext.define("core.app.model.ClazzModel", {
         type : "string",
         sortable : true
     }, {
+        name : "clazzLevel",
+        type : "string",
+        sortable : true
+    }, {
         name : "orientation",
         type : "string",
         sortable : true

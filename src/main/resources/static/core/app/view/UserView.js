@@ -39,13 +39,13 @@ Ext.define("core.app.view.UserView", {
                             fieldLabel: '用户名'
                         }, {
                             xtype: 'textfield',
-                            margin: '5 0 0 10',
+                            margin: '5 0 0 60',
                             name: 'mobilePhone',
                             fieldLabel: '手机号'
                         }, {
                             xtype: 'combobox',
                             anchor: '90%',
-                            margin: '5 0 10 5',
+                            margin: '5 0 10 60',
                             name: 'roleId',
                             fieldLabel: '系统角色',
                             displayField: 'roleName',
@@ -80,14 +80,14 @@ Ext.define("core.app.view.UserView", {
                         fieldLabel: '入职时间大于'
                     },{
                         xtype : 'datefield',
-                        margin : '5 0 0 10',
+                        margin : '5 0 0 60',
                         name : 'hireDateEnd',
                         format:'Y-m-d',
                         fieldLabel : '入职时间小于'
                     }, {
                         xtype: 'combobox',
                         anchor: '90%',
-                        margin: '5 0 10 5',
+                        margin: '5 0 10 60',
                         name: 'schoolId',
                         fieldLabel: '所属校区',
                         displayField: 'scname',
