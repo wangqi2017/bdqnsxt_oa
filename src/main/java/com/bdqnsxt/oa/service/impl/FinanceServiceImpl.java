@@ -35,7 +35,7 @@ public class FinanceServiceImpl implements FinanceService{
     @Override
     public PageResult getList(BaseQuery bq) throws Exception {
         if(systemRoleService.containsRole("财务")||systemRoleService.containsRole("出纳")){
-            bq.putCondition("processStatus","=", Finance.ProcessStatus.草稿);
+            //bq.putCondition("processStatus","=", Finance.ProcessStatus.草稿);
             bq.putCondition("f.schoolId","=",userUtils.getLoggedUser().getSchool().getId());
         }else{
             if(!userUtils.getLoggedUser().isAdmin()&&!userUtils.getLoggedUser().isLeader()&&!systemRoleService.containsRole("中心校长")){

@@ -28,6 +28,7 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,7 @@ public class StudentCodeServiceImpl implements StudentCodeService{
         return commitCodeDao.getList(baseQuery);
     }
 
+    @Scheduled(cron= "0 0 22 * * ?")
     @Transactional()
     @Override
     public void countCode() throws Exception{
@@ -64,18 +66,18 @@ public class StudentCodeServiceImpl implements StudentCodeService{
         for(Student stu:stus){
             if(stu.getMobilePhone()!=null){
                 //统计练习库
-                //String practicePath = gitServerConfig.getBasePath() +  File.separator + stu.getMobilePhone()
-                //        + File.separator + gitServerConfig.getPracticeRepo();
+                String practicePath = gitServerConfig.getBasePath() +  File.separator + stu.getMobilePhone()
+                        + File.separator + gitServerConfig.getPracticeRepo();
 
-                String practicePath = "F:\\IntelliJ_IDEA_space\\oa_bdqnsxt";
+                //String practicePath = "F:\\IntelliJ_IDEA_space\\oa_bdqnsxt";
                 countAndSave(stu,practicePath, CommitCode.RepoType.PRACTICE);
 
                 //统计代码库
-                /*
+
                 String projectPath = gitServerConfig.getBasePath() +  File.separator + stu.getMobilePhone()
                         + File.separator + gitServerConfig.getProjectRepo();
                 countAndSave(stu,projectPath, CommitCode.RepoType.PROJECT);
-                */
+
 
             }
         }

@@ -146,7 +146,7 @@ Ext.define("core.app.controller.UserController", {
         var usergrid = btn.up("#userviewid").down('#usergird');
         userstore = usergrid.getStore();
         var record = usergrid.getSelectionModel().getSelection()[0];
-
+        debugger
         if (!record) {
             Ext.MessageBox.show({
                 title : "提示",
@@ -158,16 +158,12 @@ Ext.define("core.app.controller.UserController", {
         } else {
             Ext.MessageBox.confirm("标题", "你要删除这个用户吗？", function(btn) {
                 if (btn == 'yes') {
+                    record.data.roleIds = [];
                     record.destroy({
                         scope : this,
                         callback : function(response, opts) {
-                            var resp = Ext.decode(opts.response.responseText);
-                            if (resp.success == "true"||resp.success == true) {
-                                Ext.Msg.alert("信息!", resp.message)
+                                Ext.Msg.alert("信息!", opts.request.scope.reader.jsonData["message"]);
                                 userstore.load();
-                            } else {
-                                Ext.Msg.alert("错误!", resp.message)
-                            }
                         }
                     });
                 }
